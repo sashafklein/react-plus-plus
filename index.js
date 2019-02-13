@@ -65,14 +65,14 @@ say(`Welcome to the Blink React boilerplate generator!\n`)
 
       if (choices.includes('Netlify Functions')) {
         copy([
-          { from: './setup/netlify.lambda.toml', to: './netlify.toml' },
+          { from: './setup/netlify.lambda.toml', to: 'netlify.toml' },
           { from: './setup/src/setupProxy.js' }
         ]);
         dependencies.push('netlify-lambda');
         dependencies.push('http-proxy-middleware');
       } else {
         copy([
-          { from: './netlify.toml' }
+          { from: './setup/netlify.toml' }
         ])
       }
 
@@ -80,9 +80,9 @@ say(`Welcome to the Blink React boilerplate generator!\n`)
         var to = [appDir, (pathObj.to || pathObj.from.replace('./setup/', ''))].join('/');
         var dirPath = to.split('/').slice(0, -1).join('/');
         console.log(`Making directory if not present: ${dirPath}...`);
-        // fs.mkdirSync(dirPath, { recursive: true });
+        fs.mkdirSync(dirPath, { recursive: true });
         console.log(`Copying file from ${pathObj.from} to ${to}...`)
-        // fs.copyFileSync(pathObj.from, to);
+        fs.copyFileSync(pathObj.from, to);
       });
 
       var scripts = {
@@ -111,7 +111,7 @@ say(`Welcome to the Blink React boilerplate generator!\n`)
       toDelete.forEach((file) => {
         const name = [appDir, file].join('/')
         console.log(`Deleting ${name}.\n`);
-        // fs.unlinkSync(name);
+        fs.unlinkSync(name);
       });
 
       var packageJson = JSON.parse(fs.readFileSync('./package.json'));
@@ -119,15 +119,15 @@ say(`Welcome to the Blink React boilerplate generator!\n`)
       packageJson.husky = husky;
 
       console.log('Updating package.json');
-      // fs.writeFileSync('./package.json', JSON.stringify(packageJson, null, 2));
+      fs.writeFileSync('./package.json', JSON.stringify(packageJson, null, 2));
 
       childProcess.execSync(`cd ${appDir}`);
 
       console.log('Adding dependencies...');
-      // childProcess.execSync(`yarn add ${dependencies.join(' ')}`);
+      childProcess.execSync(`yarn add ${dependencies.join(' ')}`);
 
       console.log('Adding dev dependencies...');
-      // childProcess.execSync(`yarn add -D ${devDependencies.join(' ')}`);
+      childProcess.execSync(`yarn add -D ${devDependencies.join(' ')}`);
 
       rl.write('App configured!! You\'re good to go!');
     } catch (err) {
