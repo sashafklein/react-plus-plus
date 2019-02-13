@@ -157,7 +157,7 @@ say(`React++ boilerplate generator:`)
 
       if (choices.includes('Netlify Functions')) {
         scripts['start:app'] = scripts.start;
-        scripts.start = 'NODE_PATH=src/ run-p start:**';
+        scripts.start = 'run-p start:**';
         scripts['build:app'] = scripts.build;
         scripts.build = 'NODE_PATH=src/ run-p build:**';
         scripts['build:lambda'] = "NODE_PATH=src/netlify-lambda build src/lambda";
