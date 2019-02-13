@@ -114,7 +114,8 @@ say(`React++ boilerplate generator:`)
       if (choices.includes('Netlify Functions')) {
         copy([
           { from: 'setup/netlify.lambda.toml', to: 'netlify.toml' },
-          { from: 'setup/src/setupProxy.js' }
+          { from: 'setup/src/setupProxy.js' },
+          { from: 'setup/docs/netlify-functions.md' }
         ]);
         dependencies.push('netlify-lambda');
         dependencies.push('http-proxy-middleware');
