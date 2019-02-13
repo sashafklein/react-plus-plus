@@ -24,7 +24,6 @@ const modulePath = path => joinPath(path, __dirname);
 const appPath = path => joinPath(path, appDir);
 
 const localJson = JSON.parse(fs.readFileSync(modulePath('package.json')));
-console.log('JSON', localJson);
 console.log(`RUNNING VERSION ${localJson.version}\n\n`);
 
 var rl = readline.createInterface({

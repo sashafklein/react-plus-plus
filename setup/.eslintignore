@@ -1,0 +1,6 @@
+node_modules/
+public/
+generate.js
+src/serviceWorker.js
+lambda/
+build/
