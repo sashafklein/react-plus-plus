@@ -9,7 +9,7 @@ var toDelete = ['src/App.js', 'src/App.css', 'src/App.test.js', 'src/index.css']
 var dependencies = ['node-sass', 'prop-types', 'redux', 'react-redux', 'redux-thunk', 'connected-react-router', 'history', 'react-router-dom'];
 var devDependencies = ['husky', 'eslint-config-standard-react', 'eslint-plugin-babel', 'eslint-plugin-promise', 'eslint-plugin-react'];
 
-console.log(`VERSION 21`);
+console.log(`VERSION 22`);
 
 var rl = readline.createInterface({
   input: process.stdin,
@@ -38,8 +38,8 @@ var copy = array => {
   array.forEach(el => toCopy.push(el));
 };
 
-say(`Welcome to the Blink React boilerplate generator!\n`)
-  .then(say(`This boilerplate includes Redux, Thunk, Connected-React Router, SCSS, ESLINT, and more!\n`))
+say(`React++ boilerplate generator:\n`)
+  .then(say(`This boilerplate includes Redux, Thunk, Connected-React Router, SCSS, ESLint, and more!\n`))
   .then(say(`-------------------------------------------------\n`))
   .then(say(`You've got some options.\n`))
   .then(say(`Please answer one of 'y' or 'n'.\n`))
