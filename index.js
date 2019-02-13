@@ -10,7 +10,6 @@ var dependencies = ['node-sass', 'prop-types', 'redux', 'react-redux', 'redux-th
 var devDependencies = ['husky', 'eslint-config-standard-react', 'eslint-plugin-babel', 'eslint-plugin-promise', 'eslint-plugin-react'];
 
 var appDir = process.cwd();
-console.log('APP DIRECTORY', appDir, '\n');
 
 const joinPath = (path, base) => {
   if (path.slice(0, 2) === './') {
@@ -24,7 +23,9 @@ const modulePath = path => joinPath(path, __dirname);
 const appPath = path => joinPath(path, appDir);
 
 const localJson = JSON.parse(fs.readFileSync(modulePath('package.json')));
-console.log(`RUNNING VERSION ${localJson.version}\n\n`);
+console.log(`REACT++`);
+console.log(`RUNNING VERSION ${localJson.version}\n`);
+console.log('APP DIRECTORY', appDir, '\n\n');
 
 var rl = readline.createInterface({
   input: process.stdin,
