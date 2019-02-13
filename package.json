@@ -1,5 +1,5 @@
 {
-  "name": "react-pp",
+  "name": "react-plus-plus",
   "version": "1.0.28",
   "bin": {
     "react-plus-plus": "./index.js"
