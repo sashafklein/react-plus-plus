@@ -47,7 +47,8 @@ say(`Welcome to the Blink React boilerplate generator!\n`)
   .then(() => {
     rl.write('Ready to prep your boilerplate!');
     console.log(`Working in: ${__dirname}`);
-    console.log(`Invoked in: ${process.cwd()}`);
+    console.log(`Invoked in: `);
+    console.log(`${process.cwd()}`);
     // try {
     //   copy([
     //     { from: './setup/src/redux/createStore.js' },
