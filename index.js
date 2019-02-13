@@ -54,12 +54,12 @@ var copy = array => {
   array.forEach(el => toCopy.push(el));
 };
 
-say(`React++ boilerplate generator:\n`)
-  .then(say(`This boilerplate includes Redux, Thunk, Connected-React Router, SCSS, ESLint, and more!\n`))
-  .then(say(`-------------------------------------------------\n\n`))
-  .then(say(`You've got some options.\n`))
+say(`React++ boilerplate generator:`)
+  .then(say(`This boilerplate includes Redux, Thunk, Connected-React Router, SCSS, ESLint, and more!`))
+  .then(say(`-------------------------------------------------\n`))
+  .then(say(`You've got some options.`))
   .then(say(`Please answer one of 'y' or 'n'.\n`))
-  .then(say(`----------------------------------'.\n\n`))
+  .then(say(`----------------------------------'.\n`))
   .then(ask('Netlify Functions'))
   .then(() => say(choices.length
     ? `You chose to add: \n${ choices.map(choice => `- ${choice}`).join('\n') }`
