@@ -62,9 +62,9 @@ say(`React++ boilerplate generator:\n`)
   .then(say(`----------------------------------'.\n\n`))
   .then(ask('Netlify Functions'))
   .then(() => say(choices.length
-    ? `You chose to add: \n${ choices.map(choice => `- ${choice}`).join('\n') }`)
+    ? `You chose to add: \n${ choices.map(choice => `- ${choice}`).join('\n') }`
     : 'You chose to stick with the base option set.'
-  )
+  ))
   .then(() => {
 
     try {
@@ -131,7 +131,7 @@ say(`React++ boilerplate generator:\n`)
         scripts.start = 'NODE_PATH=src/ run-p start:**';
         scripts['build:app'] = scripts.build;
         scripts.build = 'NODE_PATH=src/ run-p build:**';
-        script['build:lambda'] = "NODE_PATH=src/netlify-lambda build src/lambda";
+        scripts['build:lambda'] = "NODE_PATH=src/netlify-lambda build src/lambda";
       }
 
       var husky = {

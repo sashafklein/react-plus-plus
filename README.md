@@ -41,3 +41,4 @@ Some optional features I hope to add:
 - Immutable integration
 - SASS Linting
 - Testing boilerplate and setup
+- Component documentation (eg React Styleguidist)
