@@ -9,6 +9,8 @@ var toDelete = ['src/App.js', 'src/App.css', 'src/App.test.js', 'src/index.css']
 var dependencies = ['node-sass', 'prop-types', 'redux', 'react-redux', 'redux-thunk', 'connected-react-router', 'history', 'react-router-dom'];
 var devDependencies = ['husky', 'eslint-config-standard-react', 'eslint-plugin-babel', 'eslint-plugin-promise', 'eslint-plugin-react'];
 
+console.log(`VERSION 20`);
+
 var rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
@@ -47,7 +49,6 @@ say(`Welcome to the Blink React boilerplate generator!\n`)
   .then(() => {
     var appDir = process.cwd();
     console.log('appDir', appDir);
-    console.log(`VERSION 19`);
     try {
       copy([
         { from: './setup/src/redux/createStore.js' },
@@ -124,7 +125,7 @@ say(`Welcome to the Blink React boilerplate generator!\n`)
 
       childProcess.execSync(`cd ${appDir}`);
 
-      console.log(`Operating from directory ${process.cwd()} - ${__directory}`)
+      console.log(`Operating from directory ${process.cwd()} - ${__dirname}`)
       console.log('Adding dependencies...');
       childProcess.execSync(`yarn add ${dependencies.join(' ')}`);
 
