@@ -47,6 +47,7 @@ say(`Welcome to the Blink React boilerplate generator!\n`)
   .then(() => {
     var appDir = process.cwd();
     console.log('appDir', appDir);
+    console.log(`VERSION 18`);
     try {
       copy([
         { from: './setup/src/redux/createStore.js' },
