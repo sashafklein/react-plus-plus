@@ -33,20 +33,20 @@ var rl = readline.createInterface({
 });
 
 var ask = (target) => () => new Promise((resolve) => {
-  rl.question(`Do you intend to use ${target}?\n`, (answer) => {
+  rl.question(`Should we integrate ${target}?\n`, (answer) => {
     if (answer[0].toLowerCase() === 'y') {
       choices.push(target);
-      rl.write(`Sounds good. Adding ${target}.\n\n`);
+      console.log(`Sounds good. Adding ${target}.\n`);
       resolve();
     } else {
-      rl.write(`OK. No ${target}.\n\n`);
+      console.log(`OK. No ${target}.\n`);
       resolve();
     }
   });
 });
 
 var say = (text) => new Promise((resolve) => {
-  rl.write(text);
+  console.log(text);
   resolve()
 });
 
@@ -61,7 +61,10 @@ say(`React++ boilerplate generator:\n`)
   .then(say(`Please answer one of 'y' or 'n'.\n`))
   .then(say(`----------------------------------'.\n\n`))
   .then(ask('Netlify Functions'))
-  .then(() => say(`You chose to add: \n${ choices.map(choice => `- ${choice}`).join('\n') }\n\n`))
+  .then(() => say(choices.length
+    ? `You chose to add: \n${ choices.map(choice => `- ${choice}`).join('\n') }`)
+    : 'You chose to stick with the base option set.'
+  )
   .then(() => {
 
     try {
@@ -95,21 +98,20 @@ say(`React++ boilerplate generator:\n`)
         ])
       }
 
-      console.log('COPYING\n');
-      console.log('--------------------------------------\n');
+      console.log('COPYING:');
       toCopy.forEach(pathObj => {
         var to = appPath(pathObj.to || pathObj.from.replace('setup/', ''));
         var from = modulePath(pathObj.from);
         var dirPath = to.split('/').slice(0, -1).join('/');
         fs.mkdirSync(dirPath, { recursive: true });
-        console.log(`- From ${from} to ${to}...`)
+        console.log(`- From ${pathObj.from} to ${to}`)
         fs.copyFileSync(from, to);
       });
 
-      console.log('- README');
+      console.log('- README.md');
       fs.copyFileSync(appPath('README.md'), appPath('docs/create-react-app.md'));
       fs.copyFileSync(modulePath('setup/README.md'), appPath('README.md'));
-      console.log('--------------------------------------\n');
+      console.log('\n--------------------------------------\n');
 
       var scripts = {
         "g": "node generate.js",
@@ -118,15 +120,19 @@ say(`React++ boilerplate generator:\n`)
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
         "l": "yarn lint:fix",
-        "start": "run-p start:**",
-        "start:app": "NODE_PATH=src/ react-scripts start",
-        "start:lambda": "NODE_PATH=src/ netlify-lambda serve src/lambda",
-        "build": "NODE_PATH=src/ run-p build:**",
-        "build:app": "NODE_PATH=src/ react-scripts build",
-        "build:lambda": "NODE_PATH=src/netlify-lambda build src/lambda",
+        "start": "NODE_PATH=src/ react-scripts start",
+        "build": "NODE_PATH=src/ react-scripts build",
         "test": "NODE_PATH=src react-scripts test",
         "eject": "NODE_PATH=src react-scripts eject"
       };
+
+      if (choices.includes('Netlify Functions')) {
+        scripts['start:app'] = scripts.start;
+        scripts.start = 'NODE_PATH=src/ run-p start:**';
+        scripts['build:app'] = scripts.build;
+        scripts.build = 'NODE_PATH=src/ run-p build:**';
+        script['build:lambda'] = "NODE_PATH=src/netlify-lambda build src/lambda";
+      }
 
       var husky = {
         "hooks": {
@@ -134,30 +140,28 @@ say(`React++ boilerplate generator:\n`)
         }
       };
 
-      console.log('DELETING\n');
-      console.log('--------------------------------------\n');
+      console.log('DELETING');
       toDelete.forEach((file) => {
-        console.log(`Deleting ${file}.\n`);
+        console.log(`- ${file}`);
         fs.unlinkSync(appPath(file));
       });
-      console.log('--------------------------------------\n');
+      console.log('\n--------------------------------------\n');
 
       var packageJson = JSON.parse(fs.readFileSync(appPath('package.json')));
       packageJson.scripts = scripts;
       packageJson.husky = husky;
 
-      console.log('UPDATING package.json');
-      console.log('--------------------------------------\n');
+      console.log('UPDATING package.json\n');
       fs.writeFileSync(appPath('package.json'), JSON.stringify(packageJson, null, 2));
+      console.log('\n--------------------------------------\n');
 
-      console.log('--------------------------------------\n');
       console.log('ADDING DEPENDENCIES...');
       childProcess.execSync(`yarn add ${dependencies.join(' ')}`);
-      console.log('--------------------------------------\n');
+      console.log('\n--------------------------------------\n');
 
       console.log('ADDING DEV DEPENDENCIES...');
       childProcess.execSync(`yarn add -D ${devDependencies.join(' ')}`);
-      console.log('--------------------------------------\n');
+      console.log('\n--------------------------------------\n');
 
       console.log('APP CONFIGURED!!');
     } catch (err) {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { func, oneOfType, node, array, string } from 'prop-types';
+import { func, oneOfType, node, array } from 'prop-types';
 
 import { setActiveBreakpoint } from 'redux/actions';
 import { initReduxBreakpoints } from 'utils/responsiveHelpers';
