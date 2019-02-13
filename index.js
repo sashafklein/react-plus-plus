@@ -9,7 +9,8 @@ var toDelete = ['src/App.js', 'src/App.css', 'src/App.test.js', 'src/index.css']
 var dependencies = ['node-sass', 'prop-types', 'redux', 'react-redux', 'redux-thunk', 'connected-react-router', 'history', 'react-router-dom'];
 var devDependencies = ['husky', 'eslint-config-standard-react', 'eslint-plugin-babel', 'eslint-plugin-promise', 'eslint-plugin-react'];
 
-console.log(`VERSION 22`);
+var packageJson = JSON.parse(fs.readFileSync('./package.json'));
+console.log(`RUNNING VERSION ${packageJson.version}\n\n`);
 
 var rl = readline.createInterface({
   input: process.stdin,
@@ -40,15 +41,15 @@ var copy = array => {
 
 say(`React++ boilerplate generator:\n`)
   .then(say(`This boilerplate includes Redux, Thunk, Connected-React Router, SCSS, ESLint, and more!\n`))
-  .then(say(`-------------------------------------------------\n`))
+  .then(say(`-------------------------------------------------\n\n`))
   .then(say(`You've got some options.\n`))
   .then(say(`Please answer one of 'y' or 'n'.\n`))
-  .then(say(`----------------------------------'.\n`))
+  .then(say(`----------------------------------'.\n\n`))
   .then(ask('Netlify Functions'))
   .then(() => say(`You chose to add: \n${ choices.map(choice => `- ${choice}`).join('\n') }\n\n`))
   .then(() => {
     var appDir = process.cwd();
-    console.log('appDir', appDir);
+    console.log('APP DIRECTORY', appDir, '\n');
     try {
       copy([
         { from: './setup/src/redux/createStore.js' },
@@ -62,6 +63,7 @@ say(`React++ boilerplate generator:\n`)
         { from: './setup/.gitignore' },
         { from: './setup/.eslintrc' },
         { from: './setup/.eslintignore' },
+        { from: './setup/.circleci/config.yml' },
         { from: './setup/.circleci/config.yml' }
       ]);
 
@@ -78,14 +80,20 @@ say(`React++ boilerplate generator:\n`)
         ])
       }
 
+      console.log('COPYING\n');
+      console.log('--------------------------------------\n');
       toCopy.forEach(pathObj => {
         var to = [appDir, (pathObj.to || pathObj.from.replace('./setup/', ''))].join('/');
         var dirPath = to.split('/').slice(0, -1).join('/');
-        console.log(`Making directory if not present: ${dirPath}...`);
         fs.mkdirSync(dirPath, { recursive: true });
-        console.log(`Copying file from ${pathObj.from} to ${to}...`)
+        console.log(`- From ${pathObj.from} to ${to}...`)
         fs.copyFileSync(pathObj.from, to);
       });
+
+      console.log('- README');
+      fs.copyFileSync([appDir, 'README.md'].join('/'), [appDir, 'docs/create-react-app.md'].join('/'));
+      fs.copyFileSync('./setup/README.md', [appDir, 'README.md'].join('/'));
+      console.log('--------------------------------------\n');
 
       var scripts = {
         "g": "node generate.js",
@@ -110,29 +118,38 @@ say(`React++ boilerplate generator:\n`)
         }
       };
 
+      console.log('DELETING\n');
+      console.log('--------------------------------------\n');
       toDelete.forEach((file) => {
         const name = [appDir, file].join('/')
         console.log(`Deleting ${name}.\n`);
         fs.unlinkSync(name);
       });
+      console.log('--------------------------------------\n');
 
-      var packageJson = JSON.parse(fs.readFileSync('./package.json'));
       packageJson.scripts = scripts;
       packageJson.husky = husky;
 
-      console.log('Updating package.json');
+      console.log('UPDATING package.json');
+      console.log('--------------------------------------\n');
       fs.writeFileSync('./package.json', JSON.stringify(packageJson, null, 2));
 
       childProcess.execSync(`cd ${appDir}`);
+      console.log('--------------------------------------\n');
 
-      console.log(`Operating from directory ${process.cwd()} - ${__dirname}`)
-      console.log('Adding dependencies...');
+      console.log(`Operating from directory ${process.cwd()}.\n`)
+
+      console.log('--------------------------------------\n');
+      console.log('ADDING DEPENDENCIES...');
       childProcess.execSync(`yarn add ${dependencies.join(' ')}`);
+      console.log('--------------------------------------\n');
 
-      console.log('Adding dev dependencies...');
+      console.log('ADDING DEV DEPENDENCIES...');
       childProcess.execSync(`yarn add -D ${devDependencies.join(' ')}`);
 
-      rl.write('App configured!! You\'re good to go!');
+      console.log('--------------------------------------\n');
+
+      console.log('APP CONFIGURED!!');
     } catch (err) {
       console.log(err);
     }

@@ -21,20 +21,23 @@ And optionally:
 
 ### Usage
 
-You'll generally want to run the latest version, so:
+You'll generally want to run the latest version, right after using `create-react-app`:
 
 ```
-cd project-directory
+npx create-react-app my-new-app
+cd my-new-app
+git add .
+git commit -m 'App created' // In case you want to revert changes
 npx react-plus-plus
 ```
-
-> This package makes a large number of file changes. Be sure to commit first, in case you want to easily revert some of them.
 
 
 ### TODO
 
-Some features I hope to add:
+Add styles substructure.
 
-- Optionally: Immutable integration
-- SASS Lint
+Some optional features I hope to add:
+
+- Immutable integration
+- SASS Linting
 - Testing boilerplate and setup
