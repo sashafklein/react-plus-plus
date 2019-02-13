@@ -1,20 +1,20 @@
 /* eslint-disable no-console */
-const readline = require('readline');
-const fs = require('fs');
-const childProcess = require('child_process')
+var readline = require('readline');
+var fs = require('fs');
+var childProcess = require('child_process')
 
-const choices = [];
-const toCopy = [];
-const toDelete = ['./src/App.js', './src/App.css', './src/App.test.js', './src/index.css'];
-const dependencies = ['node-sass', 'prop-types', 'redux', 'react-redux', 'redux-thunk', 'connected-react-router', 'history', 'react-router-dom'];
-const devDependencies = ['husky', 'eslint-config-standard-react', 'eslint-plugin-babel', 'eslint-plugin-promise', 'eslint-plugin-react'];
+var choices = [];
+var toCopy = [];
+var toDelete = ['./src/App.js', './src/App.css', './src/App.test.js', './src/index.css'];
+var dependencies = ['node-sass', 'prop-types', 'redux', 'react-redux', 'redux-thunk', 'connected-react-router', 'history', 'react-router-dom'];
+var devDependencies = ['husky', 'eslint-config-standard-react', 'eslint-plugin-babel', 'eslint-plugin-promise', 'eslint-plugin-react'];
 
-const rl = readline.createInterface({
+var rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
 
-const ask = (target) => () => new Promise((resolve) => {
+var ask = (target) => () => new Promise((resolve) => {
   rl.question(`Do you intend to use ${target}?\n`, (answer) => {
     if (answer[0].toLowerCase() === 'y') {
       choices.push(target);
@@ -27,12 +27,12 @@ const ask = (target) => () => new Promise((resolve) => {
   });
 });
 
-const say = (text) => new Promise((resolve) => {
+var say = (text) => new Promise((resolve) => {
   rl.write(text);
   resolve()
 });
 
-const copy = array => {
+var copy = array => {
   array.forEach(el => toCopy.push(el));
 };
 
@@ -77,15 +77,15 @@ say(`Welcome to the Blink React boilerplate generator!\n`)
     //   }
     //
     //   toCopy.forEach(pathObj => {
-    //     const to = pathObj.to || pathObj.from.replace('/setup', '');
-    //     const dirPath = to.split('/').slice(0, -1).join('/');
+    //     var to = pathObj.to || pathObj.from.replace('/setup', '');
+    //     var dirPath = to.split('/').slice(0, -1).join('/');
     //     console.log(`Making directory if not present: ${dirPath}..`);
     //     fs.mkdirSync(dirPath, { recursive: true });
     //     console.log(`Copying file from ${pathObj.from} to ${to}...`)
     //     fs.copyFileSync(pathObj.from, pathObj.to || pathObj.from.replace('/setup', ''));
     //   });
     //
-    //   const scripts = {
+    //   var scripts = {
     //     "g": "node generate.js",
     //     "s": "yarn start",
     //     "t": "yarn test",
@@ -102,7 +102,7 @@ say(`Welcome to the Blink React boilerplate generator!\n`)
     //     "eject": "NODE_PATH=src react-scripts eject"
     //   };
     //
-    //   const husky = {
+    //   var husky = {
     //     "hooks": {
     //       "pre-commit": "yarn l"
     //     }
@@ -113,7 +113,7 @@ say(`Welcome to the Blink React boilerplate generator!\n`)
     //     fs.unlinkSync(file);
     //   });
     //
-    //   const packageJson = JSON.parse(fs.readFileSync('./package.json'));
+    //   var packageJson = JSON.parse(fs.readFileSync('./package.json'));
     //   packageJson.scripts = scripts;
     //   packageJson.husky = husky;
     //
