@@ -9,9 +9,23 @@ var toDelete = ['src/App.js', 'src/App.css', 'src/App.test.js', 'src/index.css']
 var dependencies = ['node-sass', 'prop-types', 'redux', 'react-redux', 'redux-thunk', 'connected-react-router', 'history', 'react-router-dom'];
 var devDependencies = ['husky', 'eslint-config-standard-react', 'eslint-plugin-babel', 'eslint-plugin-promise', 'eslint-plugin-react'];
 
-const localJson = JSON.parse(fs.readFileSync('./package.json'));
+var appDir = process.cwd();
+console.log('APP DIRECTORY', appDir, '\n');
+
+const joinPath = (path, base) => {
+  if (path.slice(0, 2) === './') {
+    return [base, path.slice(2)].join('/');
+  } else {
+    return [base, path].join('/');
+  }
+}
+
+const modulePath = path => joinPath(path, __dirname);
+const appPath = path => joinPath(path, appDir);
+
+const localJson = JSON.parse(fs.readFileSync(modulePath('package.json')));
 console.log('JSON', localJson);
-console.log(`RUNNING VERSION ${json.version}\n\n`);
+console.log(`RUNNING VERSION ${localJson.version}\n\n`);
 
 var rl = readline.createInterface({
   input: process.stdin,
@@ -49,52 +63,52 @@ say(`React++ boilerplate generator:\n`)
   .then(ask('Netlify Functions'))
   .then(() => say(`You chose to add: \n${ choices.map(choice => `- ${choice}`).join('\n') }\n\n`))
   .then(() => {
-    var appDir = process.cwd();
-    console.log('APP DIRECTORY', appDir, '\n');
+
     try {
       copy([
-        { from: './setup/src/redux/createStore.js' },
-        { from: './setup/src/redux/reducers/index.js' },
-        { from: './setup/src/redux/reducers/breakpoint.js' },
-        { from: './setup/src/containers/AppContainer/index.js' },
-        { from: './setup/src/containers/AppContainer/AppContainer.scss' },
-        { from: './setup/src/routes/index.js' },
-        { from: './setup/src/utils/responsiveHelpers.js' },
-        { from: './setup/generate.js' },
-        { from: './setup/.gitignore' },
-        { from: './setup/.eslintrc' },
-        { from: './setup/.eslintignore' },
-        { from: './setup/.circleci/config.yml' },
-        { from: './setup/.circleci/config.yml' },
-        { from: './setup/docs/testing.md' }
+        { from: 'setup/src/redux/createStore.js' },
+        { from: 'setup/src/redux/reducers/index.js' },
+        { from: 'setup/src/redux/reducers/breakpoint.js' },
+        { from: 'setup/src/containers/AppContainer/index.js' },
+        { from: 'setup/src/containers/AppContainer/AppContainer.scss' },
+        { from: 'setup/src/routes/index.js' },
+        { from: 'setup/src/utils/responsiveHelpers.js' },
+        { from: 'setup/generate.js' },
+        { from: 'setup/.gitignore' },
+        { from: 'setup/.eslintrc' },
+        { from: 'setup/.eslintignore' },
+        { from: 'setup/.circleci/config.yml' },
+        { from: 'setup/.circleci/config.yml' },
+        { from: 'setup/docs/testing.md' }
       ]);
 
       if (choices.includes('Netlify Functions')) {
         copy([
-          { from: './setup/netlify.lambda.toml', to: 'netlify.toml' },
-          { from: './setup/src/setupProxy.js' }
+          { from: 'setup/netlify.lambda.toml', to: 'netlify.toml' },
+          { from: 'setup/src/setupProxy.js' }
         ]);
         dependencies.push('netlify-lambda');
         dependencies.push('http-proxy-middleware');
       } else {
         copy([
-          { from: './setup/netlify.toml' }
+          { from: 'setup/netlify.toml' }
         ])
       }
 
       console.log('COPYING\n');
       console.log('--------------------------------------\n');
       toCopy.forEach(pathObj => {
-        var to = [appDir, (pathObj.to || pathObj.from.replace('./setup/', ''))].join('/');
+        var to = appPath(pathObj.to || pathObj.from.replace('setup/', ''));
+        var from = modulePath(pathObj.from);
         var dirPath = to.split('/').slice(0, -1).join('/');
         fs.mkdirSync(dirPath, { recursive: true });
-        console.log(`- From ${pathObj.from} to ${to}...`)
-        fs.copyFileSync(pathObj.from, to);
+        console.log(`- From ${from} to ${to}...`)
+        fs.copyFileSync(from, to);
       });
 
       console.log('- README');
-      fs.copyFileSync([appDir, 'README.md'].join('/'), [appDir, 'docs/create-react-app.md'].join('/'));
-      fs.copyFileSync('./setup/README.md', [appDir, 'README.md'].join('/'));
+      fs.copyFileSync(appPath('README.md'), appPath('docs/create-react-app.md'));
+      fs.copyFileSync(modulePath('setup/README.md'), appPath('README.md'));
       console.log('--------------------------------------\n');
 
       var scripts = {
@@ -123,24 +137,18 @@ say(`React++ boilerplate generator:\n`)
       console.log('DELETING\n');
       console.log('--------------------------------------\n');
       toDelete.forEach((file) => {
-        const name = [appDir, file].join('/')
-        console.log(`Deleting ${name}.\n`);
-        fs.unlinkSync(name);
+        console.log(`Deleting ${file}.\n`);
+        fs.unlinkSync(appPath(name));
       });
       console.log('--------------------------------------\n');
 
-      var packageJson = JSON.parse(fs.readFileSync([appDir, 'package.json'].join('/')));
+      var packageJson = JSON.parse(fs.readFileSync(appPath('package.json')));
       packageJson.scripts = scripts;
       packageJson.husky = husky;
 
       console.log('UPDATING package.json');
       console.log('--------------------------------------\n');
-      fs.writeFileSync('./package.json', JSON.stringify(packageJson, null, 2));
-
-      childProcess.execSync(`cd ${appDir}`);
-      console.log('--------------------------------------\n');
-
-      console.log(`Operating from directory ${process.cwd()}.\n`)
+      fs.writeFileSync(appPath('package.json'), JSON.stringify(packageJson, null, 2));
 
       console.log('--------------------------------------\n');
       console.log('ADDING DEPENDENCIES...');

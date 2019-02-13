@@ -1,6 +1,6 @@
 {
   "name": "react-plus-plus",
-  "version": "1.0.24",
+  "version": "1.0.25",
   "bin": {
     "react-plus-plus": "./index.js"
   },
