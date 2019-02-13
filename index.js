@@ -47,7 +47,7 @@ say(`Welcome to the Blink React boilerplate generator!\n`)
   .then(() => {
     var appDir = process.cwd();
     console.log('appDir', appDir);
-    console.log(`VERSION 18`);
+    console.log(`VERSION 19`);
     try {
       copy([
         { from: './setup/src/redux/createStore.js' },
@@ -124,6 +124,7 @@ say(`Welcome to the Blink React boilerplate generator!\n`)
 
       childProcess.execSync(`cd ${appDir}`);
 
+      console.log(`Operating from directory ${process.cwd()} - ${__directory}`)
       console.log('Adding dependencies...');
       childProcess.execSync(`yarn add ${dependencies.join(' ')}`);
 
