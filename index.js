@@ -23,9 +23,10 @@ const modulePath = path => joinPath(path, __dirname);
 const appPath = path => joinPath(path, appDir);
 
 const localJson = JSON.parse(fs.readFileSync(modulePath('package.json')));
-console.log(`RUNNING REACT PLUS PLUS - VERSION ${localJson.version}\n`);
+console.log(`RUNNING REACT PLUS PLUS - VERSION ${localJson.version}`);
 console.log('- App Directory:', appDir);
 console.log('- Module Directory :', __dirname);
+console.log('\n--------------------------------------\n');
 
 var rl = readline.createInterface({
   input: process.stdin,
@@ -56,10 +57,10 @@ var copy = array => {
 
 say(`React++ boilerplate generator:`)
   .then(say(`This boilerplate includes Redux, Thunk, Connected-React Router, SCSS, ESLint, and more!`))
-  .then(say(`-------------------------------------------------\n`))
+  .then(say('\n--------------------------------------\n'))
   .then(say(`You've got some options.`))
-  .then(say(`Please answer one of 'y' or 'n'.\n`))
-  .then(say(`----------------------------------'.\n`))
+  .then(say(`Please answer one of 'y' or 'n'.`))
+  .then(say('\n--------------------------------------\n'))
   .then(ask('Netlify Functions'))
   .then(() => say(choices.length
     ? `You chose to add: \n${ choices.map(choice => `- ${choice}`).join('\n') }`
@@ -167,12 +168,13 @@ say(`React++ boilerplate generator:`)
       childProcess.execSync(`yarn add -D ${devDependencies.join(' ')}`);
       console.log('\n--------------------------------------\n');
 
-      console.log('FETCHING BASE STYLES');
-      console.log('CWD', process.cwd());
-      childProcess.execSync(`cd src`);
-      console.log('CWD', process.cwd());
+      console.log('FETCHING LATEST BASE STYLES');
       childProcess.execSync(`git clone git@github.com:weareredshift/base-sass.git styles`);
-      fs.unlinkSync(appPath('src/styles/.git'));
+      fs.rmdirSync(appPath('styles/.git'));
+      fs.unlinkSync(appPath('styles/.gitignore'));
+      fs.unlinkSync(appPath('styles/core.css'));
+      fs.unlinkSync(appPath('styles/README.md'));
+      fs.renameSync(appPath('styles'), appPath('src/styles'));
       console.log('\n--------------------------------------\n');
       console.log('App configured! View README for instructions.');
     } catch (err) {
