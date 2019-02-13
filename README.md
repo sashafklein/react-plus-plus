@@ -9,6 +9,7 @@ This tool sets up boilerplate on top of a fresh Create React App install, instal
 - ESlint
 - CircleCI
 - Netlify
+- Base SCSS structure
 
 As well as some homemade tools:
 
@@ -34,11 +35,10 @@ npx react-plus-plus
 
 ### TODO
 
-Add styles substructure.
-
 Some optional features I hope to add:
 
 - Immutable integration
 - SASS Linting
 - Testing boilerplate and setup
 - Component documentation (eg React Styleguidist)
+- Common components

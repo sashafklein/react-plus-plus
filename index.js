@@ -7,7 +7,8 @@ const choices = [];
 const toCopy = [];
 const toDelete = ['src/App.js', 'src/App.css', 'src/App.test.js', 'src/index.css'];
 const dependencies = ['node-sass', 'prop-types', 'redux', 'react-redux', 'redux-thunk', 'connected-react-router', 'history', 'react-router-dom'];
-const devDependencies = ['husky', 'eslint-config-standard-react', 'eslint-plugin-babel', 'eslint-plugin-promise', 'eslint-plugin-react'];
+const devDependencies = ['husky', 'eslint-config-standard-react', 'eslint-plugin-babel', 'eslint-plugin-promise', 'eslint-plugin-react', 'npm-run-all'];
+let confirmed = false;
 
 const appDir = process.cwd();
 
@@ -23,17 +24,21 @@ const modulePath = path => joinPath(path, __dirname);
 const appPath = path => joinPath(path, appDir);
 
 const localJson = JSON.parse(fs.readFileSync(modulePath('package.json')));
+
 const title = `** REACT PLUS PLUS - VERSION ${localJson.version} **`;
-const banner = title.replace(/\w/g, '*');
+const banner = title.replace(/./g, '*');
+const keyline = `\n${title.replace(/./g, '-')}\n`;
+
 console.log('\n');
 console.log(banner);
 console.log(title);
 console.log(banner)
-console.log('\n--------------------------------------\n');
+
+console.log(keyline);
 console.log('CONTEXT:')
 console.log('- App Directory:', appDir);
 console.log('- Module Directory :', __dirname);
-console.log('\n--------------------------------------\n');
+console.log(keyline);
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -64,16 +69,27 @@ const copy = array => {
 
 say(`React++ boilerplate generator:`)
   .then(say(`This boilerplate includes Redux, Thunk, Connected-React Router, SCSS, ESLint, and more!`))
-  .then(say('\n--------------------------------------\n'))
+  .then(say(keyline))
   .then(say(`You've got some options.`))
   .then(say(`Please answer one of 'y' or 'n'.`))
-  .then(say('\n--------------------------------------\n'))
+  .then(say(keyline))
   .then(ask('Netlify Functions'))
   .then(() => say(choices.length
     ? `You chose to add: \n${ choices.map(choice => `- ${choice}`).join('\n') }`
     : 'You chose to stick with the base option set.'
   ))
+  .then(() => new Promise((resolve) => {
+    rl.question(`\nIs that configuration correct?\n`, (answer) => {
+      confirmed = answer[0].toLowerCase() === 'y'
+      resolve();
+    });
+  }))
   .then(() => {
+    if (!confirmed) {
+      console.log('OK. Canceling boilerplate generation!');
+      rl.close();
+      return;
+    }
 
     try {
       copy([
@@ -108,7 +124,7 @@ say(`React++ boilerplate generator:`)
         ])
       }
 
-      console.log('\n--------------------------------------\n');
+      console.log(keyline);
       console.log('COPYING:');
       toCopy.forEach(pathObj => {
         const to = appPath(pathObj.to || pathObj.from.replace('setup/', ''));
@@ -123,7 +139,7 @@ say(`React++ boilerplate generator:`)
       fs.copyFileSync(appPath('README.md'), appPath('docs/create-react-app.md'));
       console.log(`- FROM ${ modulePath('setup/README.md') } TO ${ appPath('README.md') }`);
       fs.copyFileSync(modulePath('setup/README.md'), appPath('README.md'));
-      console.log('\n--------------------------------------\n');
+      console.log(keyline);
 
       const scripts = {
         "g": "node generate.js",
@@ -157,7 +173,7 @@ say(`React++ boilerplate generator:`)
         console.log(`- ${file}`);
         fs.unlinkSync(appPath(file));
       });
-      console.log('\n--------------------------------------\n');
+      console.log(keyline);
 
       const packageJson = JSON.parse(fs.readFileSync(appPath('package.json')));
       packageJson.scripts = scripts;
@@ -165,15 +181,15 @@ say(`React++ boilerplate generator:`)
 
       console.log('UPDATING package.json');
       fs.writeFileSync(appPath('package.json'), JSON.stringify(packageJson, null, 2));
-      console.log('\n--------------------------------------\n');
+      console.log(keyline);
 
       console.log('ADDING DEPENDENCIES...\n');
       childProcess.execSync(`yarn add ${dependencies.join(' ')}`);
-      console.log('\n--------------------------------------\n');
+      console.log(keyline);
 
       console.log('ADDING DEV DEPENDENCIES...\n');
       childProcess.execSync(`yarn add -D ${devDependencies.join(' ')}`);
-      console.log('\n--------------------------------------\n');
+      console.log(keyline);
 
       console.log('FETCHING LATEST BASE STYLES');
       childProcess.execSync(`git clone git@github.com:weareredshift/base-sass.git styles`);
@@ -182,8 +198,11 @@ say(`React++ boilerplate generator:`)
       fs.unlinkSync(appPath('styles/core.css'));
       fs.unlinkSync(appPath('styles/README.md'));
       fs.renameSync(appPath('styles'), appPath('src/styles'));
-      console.log('\n--------------------------------------\n');
-      console.log('App configured! View README for instructions.');
+      console.log(keyline);
+      console.log('APP CONFIGURED!');
+      console.log('You might want to commit these changes.');
+      console.log('View README.md for instructions.');
+      console.log(keyline);
     } catch (err) {
       console.log(err);
     }
