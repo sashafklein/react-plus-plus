@@ -9,8 +9,9 @@ var toDelete = ['src/App.js', 'src/App.css', 'src/App.test.js', 'src/index.css']
 var dependencies = ['node-sass', 'prop-types', 'redux', 'react-redux', 'redux-thunk', 'connected-react-router', 'history', 'react-router-dom'];
 var devDependencies = ['husky', 'eslint-config-standard-react', 'eslint-plugin-babel', 'eslint-plugin-promise', 'eslint-plugin-react'];
 
-var packageJson = JSON.parse(fs.readFileSync('./package.json'));
-console.log(`RUNNING VERSION ${packageJson.version}\n\n`);
+const localJson = JSON.parse(fs.readFileSync('./package.json'));
+console.log('JSON', localJson);
+console.log(`RUNNING VERSION ${json.version}\n\n`);
 
 var rl = readline.createInterface({
   input: process.stdin,
@@ -64,7 +65,8 @@ say(`React++ boilerplate generator:\n`)
         { from: './setup/.eslintrc' },
         { from: './setup/.eslintignore' },
         { from: './setup/.circleci/config.yml' },
-        { from: './setup/.circleci/config.yml' }
+        { from: './setup/.circleci/config.yml' },
+        { from: './setup/docs/testing.md' }
       ]);
 
       if (choices.includes('Netlify Functions')) {
@@ -127,6 +129,7 @@ say(`React++ boilerplate generator:\n`)
       });
       console.log('--------------------------------------\n');
 
+      var packageJson = JSON.parse(fs.readFileSync([appDir, 'package.json'].join('/')));
       packageJson.scripts = scripts;
       packageJson.husky = husky;
 
