@@ -74,10 +74,11 @@ say(`React++ boilerplate generator:\n`)
         { from: 'setup/src/routes/index.js' },
         { from: 'setup/src/utils/responsiveHelpers.js' },
         { from: 'setup/generate.js' },
-        { from: 'setup/.gitignore', to: '.gitignore' },
-        { from: 'setup/.eslintrc', to: '.eslintrc' },
-        { from: 'setup/.eslintignore', to: '.eslintignore' },
-        { from: 'setup/.circleci/config.yml', to: '.circleci/config.yml' },
+        // Hidden files aren't copied, so they're not hidden here
+        { from: 'setup/gitignore', to: '.gitignore' },
+        { from: 'setup/eslintrc', to: '.eslintrc' },
+        { from: 'setup/eslintignore', to: '.eslintignore' },
+        { from: 'setup/circleci/config.yml', to: '.circleci/config.yml' },
         { from: 'setup/docs/testing.md' }
       ]);
 
@@ -156,7 +157,6 @@ say(`React++ boilerplate generator:\n`)
 
       console.log('ADDING DEV DEPENDENCIES...');
       childProcess.execSync(`yarn add -D ${devDependencies.join(' ')}`);
-
       console.log('--------------------------------------\n');
 
       console.log('APP CONFIGURED!!');
