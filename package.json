@@ -1,8 +1,8 @@
 {
   "name": "react-plus-plus",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "bin": {
-    "react-plus-plus": "node ./index.js"
+    "react-plus-plus": "./index.js"
   },
   "description": "Tool to add modular boilerplate on top of create-react-app",
   "main": "index.js",
