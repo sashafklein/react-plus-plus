@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 var readline = require('readline');
 var fs = require('fs');
 var childProcess = require('child_process')
