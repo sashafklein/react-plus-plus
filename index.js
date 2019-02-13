@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 var readline = require('readline');
 var fs = require('fs');
 var childProcess = require('child_process')
