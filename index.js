@@ -1,15 +1,15 @@
 #!/usr/bin/env node
-var readline = require('readline');
-var fs = require('fs');
-var childProcess = require('child_process')
+const readline = require('readline');
+const fs = require('fs');
+const childProcess = require('child_process')
 
-var choices = [];
-var toCopy = [];
-var toDelete = ['src/App.js', 'src/App.css', 'src/App.test.js', 'src/index.css'];
-var dependencies = ['node-sass', 'prop-types', 'redux', 'react-redux', 'redux-thunk', 'connected-react-router', 'history', 'react-router-dom'];
-var devDependencies = ['husky', 'eslint-config-standard-react', 'eslint-plugin-babel', 'eslint-plugin-promise', 'eslint-plugin-react'];
+const choices = [];
+const toCopy = [];
+const toDelete = ['src/App.js', 'src/App.css', 'src/App.test.js', 'src/index.css'];
+const dependencies = ['node-sass', 'prop-types', 'redux', 'react-redux', 'redux-thunk', 'connected-react-router', 'history', 'react-router-dom'];
+const devDependencies = ['husky', 'eslint-config-standard-react', 'eslint-plugin-babel', 'eslint-plugin-promise', 'eslint-plugin-react'];
 
-var appDir = process.cwd();
+const appDir = process.cwd();
 
 const joinPath = (path, base) => {
   if (path.slice(0, 2) === './') {
@@ -23,17 +23,24 @@ const modulePath = path => joinPath(path, __dirname);
 const appPath = path => joinPath(path, appDir);
 
 const localJson = JSON.parse(fs.readFileSync(modulePath('package.json')));
-console.log(`RUNNING REACT PLUS PLUS - VERSION ${localJson.version}`);
+const title = `** REACT PLUS PLUS - VERSION ${localJson.version} **`;
+const banner = title.replace(/\w/g, '*');
+console.log('\n');
+console.log(banner);
+console.log(title);
+console.log(banner)
+console.log('\n--------------------------------------\n');
+console.log('CONTEXT:')
 console.log('- App Directory:', appDir);
 console.log('- Module Directory :', __dirname);
 console.log('\n--------------------------------------\n');
 
-var rl = readline.createInterface({
+const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
 
-var ask = (target) => () => new Promise((resolve) => {
+const ask = (target) => () => new Promise((resolve) => {
   rl.question(`Should we integrate ${target}?\n`, (answer) => {
     if (answer[0].toLowerCase() === 'y') {
       choices.push(target);
@@ -46,12 +53,12 @@ var ask = (target) => () => new Promise((resolve) => {
   });
 });
 
-var say = (text) => new Promise((resolve) => {
+const say = (text) => new Promise((resolve) => {
   console.log(text);
   resolve()
 });
 
-var copy = array => {
+const copy = array => {
   array.forEach(el => toCopy.push(el));
 };
 
@@ -104,9 +111,9 @@ say(`React++ boilerplate generator:`)
       console.log('\n--------------------------------------\n');
       console.log('COPYING:');
       toCopy.forEach(pathObj => {
-        var to = appPath(pathObj.to || pathObj.from.replace('setup/', ''));
-        var from = modulePath(pathObj.from);
-        var dirPath = to.split('/').slice(0, -1).join('/');
+        const to = appPath(pathObj.to || pathObj.from.replace('setup/', ''));
+        const from = modulePath(pathObj.from);
+        const dirPath = to.split('/').slice(0, -1).join('/');
         fs.mkdirSync(dirPath, { recursive: true });
         console.log(`- FROM ${pathObj.from} TO ${to}`)
         fs.copyFileSync(from, to);
@@ -118,7 +125,7 @@ say(`React++ boilerplate generator:`)
       fs.copyFileSync(modulePath('setup/README.md'), appPath('README.md'));
       console.log('\n--------------------------------------\n');
 
-      var scripts = {
+      const scripts = {
         "g": "node generate.js",
         "s": "yarn start",
         "t": "yarn test",
@@ -139,7 +146,7 @@ say(`React++ boilerplate generator:`)
         scripts['build:lambda'] = "NODE_PATH=src/netlify-lambda build src/lambda";
       }
 
-      var husky = {
+      const husky = {
         "hooks": {
           "pre-commit": "yarn l"
         }
@@ -152,7 +159,7 @@ say(`React++ boilerplate generator:`)
       });
       console.log('\n--------------------------------------\n');
 
-      var packageJson = JSON.parse(fs.readFileSync(appPath('package.json')));
+      const packageJson = JSON.parse(fs.readFileSync(appPath('package.json')));
       packageJson.scripts = scripts;
       packageJson.husky = husky;
 
@@ -170,7 +177,7 @@ say(`React++ boilerplate generator:`)
 
       console.log('FETCHING LATEST BASE STYLES');
       childProcess.execSync(`git clone git@github.com:weareredshift/base-sass.git styles`);
-      fs.rmdirSync(appPath('styles/.git'));
+      childProcess.execSync(`rm -rf ${appPath('styles/.git')}`);
       fs.unlinkSync(appPath('styles/.gitignore'));
       fs.unlinkSync(appPath('styles/core.css'));
       fs.unlinkSync(appPath('styles/README.md'));
