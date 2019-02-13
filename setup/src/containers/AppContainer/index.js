@@ -12,6 +12,7 @@ class AppContainer extends React.Component {
   componentDidMount () {
     const { dispatch } = this.props;
 
+    // Track window changes and update global breakpoint object accordingly
     initReduxBreakpoints.call(
       this, window, (breakpointName, breakpointSize, mediaQueryState) =>
         dispatch(setActiveBreakpoint(breakpointName, breakpointSize, mediaQueryState))
@@ -32,14 +33,12 @@ class AppContainer extends React.Component {
 }
 
 AppContainer.propTypes = {
-  language: string,
   children: oneOfType([node, array]),
   dispatch: func
 };
 
 const mapStateToProps = state => ({
-  router: state.router,
-  language: state.language
+  router: state.router
 });
 
 export default connect(mapStateToProps)(AppContainer);

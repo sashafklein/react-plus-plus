@@ -138,7 +138,7 @@ say(`React++ boilerplate generator:\n`)
       console.log('--------------------------------------\n');
       toDelete.forEach((file) => {
         console.log(`Deleting ${file}.\n`);
-        fs.unlinkSync(appPath(name));
+        fs.unlinkSync(appPath(file));
       });
       console.log('--------------------------------------\n');
 
