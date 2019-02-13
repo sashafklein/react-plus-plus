@@ -1,0 +1,14 @@
+{
+  "name": "react-setup",
+  "version": "1.0.0",
+  "description": "Tool to add modular boilerplate on top of create-react-app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sashafklein/react-plus-plus.git"
+  },
+  "license": "ISC"
+}
