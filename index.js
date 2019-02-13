@@ -76,9 +76,9 @@ say(`Welcome to the Blink React boilerplate generator!\n`)
       }
 
       toCopy.forEach(pathObj => {
-        var to = [appDir, (pathObj.to || pathObj.from.replace('/setup', '')).slice(1)].join('/');
+        var to = [appDir, (pathObj.to || pathObj.from.replace('./setup/', ''))].join('/');
         var dirPath = to.split('/').slice(0, -1).join('/');
-        console.log(`Making directory if not present: ${dirPath}..`);
+        console.log(`Making directory if not present: ${dirPath}...`);
         // fs.mkdirSync(dirPath, { recursive: true });
         console.log(`Copying file from ${pathObj.from} to ${to}...`)
         // fs.copyFileSync(pathObj.from, to);
