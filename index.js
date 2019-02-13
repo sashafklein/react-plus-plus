@@ -74,11 +74,10 @@ say(`React++ boilerplate generator:\n`)
         { from: 'setup/src/routes/index.js' },
         { from: 'setup/src/utils/responsiveHelpers.js' },
         { from: 'setup/generate.js' },
-        { from: 'setup/.gitignore' },
-        { from: 'setup/.eslintrc' },
-        { from: 'setup/.eslintignore' },
-        { from: 'setup/.circleci/config.yml' },
-        { from: 'setup/.circleci/config.yml' },
+        { from: 'setup/.gitignore', to: '.gitignore' },
+        { from: 'setup/.eslintrc', to: '.eslintrc' },
+        { from: 'setup/.eslintignore', to: '.eslintignore' },
+        { from: 'setup/.circleci/config.yml', to: '.circleci/config.yml' },
         { from: 'setup/docs/testing.md' }
       ]);
 
