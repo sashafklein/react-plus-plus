@@ -23,9 +23,9 @@ const modulePath = path => joinPath(path, __dirname);
 const appPath = path => joinPath(path, appDir);
 
 const localJson = JSON.parse(fs.readFileSync(modulePath('package.json')));
-console.log(`REACT++`);
-console.log(`RUNNING VERSION ${localJson.version}\n`);
-console.log('APP DIRECTORY', appDir, '\n\n');
+console.log(`RUNNING REACT PLUS PLUS - VERSION ${localJson.version}\n`);
+console.log('- App Directory:', appDir);
+console.log('- Module Directory :', __dirname);
 
 var rl = readline.createInterface({
   input: process.stdin,
@@ -82,7 +82,9 @@ say(`React++ boilerplate generator:`)
         { from: 'setup/eslintrc', to: '.eslintrc' },
         { from: 'setup/eslintignore', to: '.eslintignore' },
         { from: 'setup/circleci/config.yml', to: '.circleci/config.yml' },
-        { from: 'setup/docs/testing.md' }
+        { from: 'setup/docs/testing.md' },
+        { from: 'setup/docs/decisions.md' },
+        { from: 'setup/src/index.js' }
       ]);
 
       if (choices.includes('Netlify Functions')) {
@@ -98,18 +100,20 @@ say(`React++ boilerplate generator:`)
         ])
       }
 
+      console.log('\n--------------------------------------\n');
       console.log('COPYING:');
       toCopy.forEach(pathObj => {
         var to = appPath(pathObj.to || pathObj.from.replace('setup/', ''));
         var from = modulePath(pathObj.from);
         var dirPath = to.split('/').slice(0, -1).join('/');
         fs.mkdirSync(dirPath, { recursive: true });
-        console.log(`- From ${pathObj.from} to ${to}`)
+        console.log(`- FROM ${pathObj.from} TO ${to}`)
         fs.copyFileSync(from, to);
       });
 
-      console.log('- README.md');
+      console.log(`- FROM ${ appPath('README.md') } TO ${ appPath('docs/README.md') }`);
       fs.copyFileSync(appPath('README.md'), appPath('docs/create-react-app.md'));
+      console.log(`- FROM ${ modulePath('setup/README.md') } TO ${ appPath('README.md') }`);
       fs.copyFileSync(modulePath('setup/README.md'), appPath('README.md'));
       console.log('\n--------------------------------------\n');
 
@@ -151,19 +155,26 @@ say(`React++ boilerplate generator:`)
       packageJson.scripts = scripts;
       packageJson.husky = husky;
 
-      console.log('UPDATING package.json\n');
+      console.log('UPDATING package.json');
       fs.writeFileSync(appPath('package.json'), JSON.stringify(packageJson, null, 2));
       console.log('\n--------------------------------------\n');
 
-      console.log('ADDING DEPENDENCIES...');
+      console.log('ADDING DEPENDENCIES...\n');
       childProcess.execSync(`yarn add ${dependencies.join(' ')}`);
       console.log('\n--------------------------------------\n');
 
-      console.log('ADDING DEV DEPENDENCIES...');
+      console.log('ADDING DEV DEPENDENCIES...\n');
       childProcess.execSync(`yarn add -D ${devDependencies.join(' ')}`);
       console.log('\n--------------------------------------\n');
 
-      console.log('APP CONFIGURED!!');
+      console.log('FETCHING BASE STYLES');
+      console.log('CWD', process.cwd());
+      childProcess.execSync(`cd src`);
+      console.log('CWD', process.cwd());
+      childProcess.execSync(`git clone git@github.com:weareredshift/base-sass.git styles`);
+      fs.unlinkSync(appPath('src/styles/.git'));
+      console.log('\n--------------------------------------\n');
+      console.log('App configured! View README for instructions.');
     } catch (err) {
       console.log(err);
     }
