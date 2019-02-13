@@ -46,6 +46,7 @@ say(`Welcome to the Blink React boilerplate generator!\n`)
   .then(() => say(`You chose to add: \n${ choices.map(choice => `- ${choice}`).join('\n') }\n\n`))
   .then(() => {
     var appDir = process.cwd();
+    console.log('appDir', appDir);
     try {
       copy([
         { from: './setup/src/redux/createStore.js' },
