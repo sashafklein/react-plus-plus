@@ -36,6 +36,11 @@ var copy = array => {
   array.forEach(el => toCopy.push(el));
 };
 
+console.log('Ready to prep your boilerplate!\n');
+console.log(`Working in: ${__dirname}\n`);
+console.log(`Invoked in: `);
+console.log(`${process.cwd()}`);
+
 say(`Welcome to the Blink React boilerplate generator!\n`)
   .then(say(`This boilerplate includes Redux, Thunk, Connected-React Router, SCSS, ESLINT, and more!\n`))
   .then(say(`-------------------------------------------------\n`))
@@ -45,10 +50,6 @@ say(`Welcome to the Blink React boilerplate generator!\n`)
   .then(ask('Netlify Functions'))
   .then(() => say(`You chose to add: \n${ choices.map(choice => `- ${choice}`).join('\n') }\n\n`))
   .then(() => {
-    rl.write('Ready to prep your boilerplate!');
-    console.log(`Working in: ${__dirname}`);
-    console.log(`Invoked in: `);
-    console.log(`${process.cwd()}`);
     // try {
     //   copy([
     //     { from: './setup/src/redux/createStore.js' },
