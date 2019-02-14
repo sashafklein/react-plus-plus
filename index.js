@@ -72,7 +72,7 @@ const makeChoice = choiceName => (yesObject, noObject = {}) => {
   copy(object.files, files);
   copy(object.dependencies, dependencies);
   copy(object.devDependencies, devDependencies);
-  packageJson.scripts = { ...object.scripts, ...(yesObject.scripts || {}) };
+  packageJson.scripts = { ...packageJson.scripts, ...(object.scripts || {}) };
 };
 
 say(`React++ boilerplate generator:`)
@@ -84,7 +84,7 @@ say(`React++ boilerplate generator:`)
   .then(ask('Netlify Functions'))
   .then(ask('SCSS Linting'))
   .then(ask('Immutable'))
-  .then(ask('Styleguidist Component Docs'))
+  // .then(ask('Styleguidist Component Docs'))
   .then(() => say(choices.length
     ? `You chose to add: \n${ choices.map(choice => `- ${choice}`).join('\n') }`
     : 'You chose to stick with the base option set.'
@@ -177,14 +177,15 @@ say(`React++ boilerplate generator:`)
         files: [{ from: 'setup/src/utils/propTypes.js' }]
       });
 
-      makeChoice('Styleguidist Component Docs')({
-        devDependencies: ['react-styleguidist'],
-        scripts: {
-          'docs:serve': 'npx styleguidist server',
-          'docs:build': 'npx styleguidist build'
-        },
-        files: [{ from: 'setup/styleguide.config.js' }]
-      });
+      // Blocked by need to eject to handle webpack config for SCSS imports
+      // makeChoice('Styleguidist Component Docs')({
+      //   devDependencies: ['react-styleguidist'],
+      //   scripts: {
+      //     'docs:serve': 'npx styleguidist server',
+      //     'docs:build': 'npx styleguidist build'
+      //   },
+      //   files: [{ from: 'setup/styleguide.config.js' }]
+      // });
 
       console.log(keyline);
       console.log('COPYING:');
