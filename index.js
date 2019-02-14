@@ -41,11 +41,12 @@ console.log('- App Directory:', appDir);
 console.log('- Module Directory :', __dirname);
 console.log(keyline);
 
-let packageJson = {};
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
+
+let packageJson = {};
 
 const ask = (target) => () => new Promise((resolve) => {
   rl.question(`Should we integrate ${target}?\n`, (answer) => {
@@ -84,6 +85,7 @@ say(`React++ boilerplate generator:`)
   .then(say(`Please answer one of 'y' or 'n'.`))
   .then(say(keyline))
   .then(ask('Netlify Functions'))
+  .then(ask('SCSS Linting'))
   .then(() => say(choices.length
     ? `You chose to add: \n${ choices.map(choice => `- ${choice}`).join('\n') }`
     : 'You chose to stick with the base option set.'
@@ -102,6 +104,27 @@ say(`React++ boilerplate generator:`)
     }
 
     try {
+      packageJson = JSON.parse(fs.readFileSync(appPath('package.json')));
+      const scripts = {
+        "g": "node generate.js",
+        "s": "yarn start",
+        "t": "yarn test",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "l": "yarn lint:fix",
+        "start": "NODE_PATH=src/ react-scripts start",
+        "build": "NODE_PATH=src/ react-scripts build",
+        "test": "NODE_PATH=src react-scripts test",
+        "eject": "NODE_PATH=src react-scripts eject"
+      };
+      const husky = {
+        "hooks": {
+          "pre-commit": "yarn l"
+        }
+      };
+      packageJson.scripts = scripts;
+      packageJson.husky = husky;
+
       copy([
         { from: 'setup/src/redux/createStore.js' },
         { from: 'setup/src/redux/reducers/index.js' },
@@ -129,7 +152,14 @@ say(`React++ boilerplate generator:`)
           { from: 'setup/src/setupProxy.js' },
           { from: 'setup/docs/netlify-functions.md' }
         ],
-        dependencies: ['netlify-lambda', 'http-proxy-middleware']
+        dependencies: ['netlify-lambda', 'http-proxy-middleware'],
+        packageJson: {
+          'start:app': scripts.start,
+          start: 'run-p start:**',
+          'build:app': scripts.build,
+          build: 'NODE_PATH=src/ run-p build:**',
+          'build:lambda': "NODE_PATH=src/netlify-lambda build src/lambda",
+        }
       }, {
         files: [{ from: 'setup/netlify.toml' }]
       });
@@ -160,43 +190,12 @@ say(`React++ boilerplate generator:`)
       fs.copyFileSync(modulePath('setup/README.md'), appPath('README.md'));
       console.log(keyline);
 
-      const scripts = {
-        "g": "node generate.js",
-        "s": "yarn start",
-        "t": "yarn test",
-        "lint": "eslint .",
-        "lint:fix": "eslint . --fix",
-        "l": "yarn lint:fix",
-        "start": "NODE_PATH=src/ react-scripts start",
-        "build": "NODE_PATH=src/ react-scripts build",
-        "test": "NODE_PATH=src react-scripts test",
-        "eject": "NODE_PATH=src react-scripts eject"
-      };
-
-      if (choices.includes('Netlify Functions')) {
-        scripts['start:app'] = scripts.start;
-        scripts.start = 'run-p start:**';
-        scripts['build:app'] = scripts.build;
-        scripts.build = 'NODE_PATH=src/ run-p build:**';
-        scripts['build:lambda'] = "NODE_PATH=src/netlify-lambda build src/lambda";
-      }
-
-      const husky = {
-        "hooks": {
-          "pre-commit": "yarn l"
-        }
-      };
-
       console.log('DELETING');
       toDelete.forEach((file) => {
         console.log(`- ${file}`);
         fs.unlinkSync(appPath(file));
       });
       console.log(keyline);
-
-      packageJson = JSON.parse(fs.readFileSync(appPath('package.json')));
-      packageJson.scripts = scripts;
-      packageJson.husky = husky;
 
       console.log('UPDATING package.json');
       fs.writeFileSync(appPath('package.json'), JSON.stringify(packageJson, null, 2));
