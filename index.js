@@ -49,15 +49,12 @@ const rl = readline.createInterface({
 let packageJson = {};
 
 const ask = (target) => () => new Promise((resolve) => {
-  rl.question(`Should we integrate ${target}?\n`, (answer) => {
+  rl.question(`Integrate ${target}?\n`, (answer) => {
     if (answer[0].toLowerCase() === 'y') {
       choices.push(target);
-      console.log(`Sounds good. Adding ${target}.\n`);
-      resolve();
-    } else {
-      console.log(`OK. No ${target}.\n`);
-      resolve();
     }
+    console.log('\n');
+    resolve();
   });
 });
 
@@ -72,6 +69,7 @@ const copy = (fromArr, toArr) => {
 
 const makeChoice = choiceName => (yesObject, noObject = {}) => {
   const object = choices.includes(choiceName) ? yesObject : noObject;
+  console.log("CHANGES", choiceName, JSON.stringify(object, null, 2));
   copy(object.files, files);
   copy(object.dependencies, dependencies);
   copy(object.devDependencies, devDependencies);
@@ -87,6 +85,7 @@ say(`React++ boilerplate generator:`)
   .then(ask('Netlify Functions'))
   .then(ask('SCSS Linting'))
   .then(ask('Immutable'))
+  .then(ask('Styleguidist Component Docs'))
   .then(() => say(choices.length
     ? `You chose to add: \n${ choices.map(choice => `- ${choice}`).join('\n') }`
     : 'You chose to stick with the base option set.'
