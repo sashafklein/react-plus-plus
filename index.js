@@ -144,7 +144,7 @@ say(`React++ boilerplate generator:`)
         { from: 'setup/docs/testing.md' },
         { from: 'setup/docs/decisions.md' },
         { from: 'setup/src/index.js' }
-      ]);
+      ], files);
 
       makeChoice('Netlify Functions')({
         files: [
