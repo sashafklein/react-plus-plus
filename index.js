@@ -4,10 +4,11 @@ const fs = require('fs');
 const childProcess = require('child_process')
 
 const choices = [];
-const toCopy = [];
-const toDelete = ['src/App.js', 'src/App.css', 'src/App.test.js', 'src/index.css'];
+const files = [];
 const dependencies = ['node-sass', 'prop-types', 'redux', 'react-redux', 'redux-thunk', 'connected-react-router', 'history', 'react-router-dom'];
 const devDependencies = ['husky', 'eslint-config-standard-react', 'eslint-plugin-babel', 'eslint-plugin-promise', 'eslint-plugin-react', 'npm-run-all'];
+
+const toDelete = ['src/App.js', 'src/App.css', 'src/App.test.js', 'src/index.css'];
 let confirmed = false;
 
 const appDir = process.cwd();
@@ -40,6 +41,7 @@ console.log('- App Directory:', appDir);
 console.log('- Module Directory :', __dirname);
 console.log(keyline);
 
+let packageJson = {};
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
@@ -63,8 +65,16 @@ const say = (text) => new Promise((resolve) => {
   resolve()
 });
 
-const copy = array => {
-  array.forEach(el => toCopy.push(el));
+const copy = (fromArr, toArr) => {
+  (fromArr || []).forEach(el => toArr.push(el));
+};
+
+const makeChoice = choiceName => (yesObject, noObject = {}) => {
+  const object = choices.includes(choiceName) ? yesObject : noObject;
+  copy(object.files, files);
+  copy(object.dependencies, dependencies);
+  copy(object.devDependencies, devDependencies);
+  packageJson = { ...object.packageJson, ...(yesObject.packageJson || {}) };
 };
 
 say(`React++ boilerplate generator:`)
@@ -96,11 +106,13 @@ say(`React++ boilerplate generator:`)
         { from: 'setup/src/redux/createStore.js' },
         { from: 'setup/src/redux/reducers/index.js' },
         { from: 'setup/src/redux/reducers/breakpoint.js' },
+        { from: 'setup/src/redux/reducers/actions.js' },
         { from: 'setup/src/containers/AppContainer/index.js' },
         { from: 'setup/src/containers/AppContainer/AppContainer.scss' },
         { from: 'setup/src/routes/index.js' },
         { from: 'setup/src/utils/responsiveHelpers.js' },
         { from: 'setup/generate.js' },
+
         // Hidden files aren't copied, so they're not hidden here
         { from: 'setup/gitignore', to: '.gitignore' },
         { from: 'setup/eslintrc', to: '.eslintrc' },
@@ -111,23 +123,29 @@ say(`React++ boilerplate generator:`)
         { from: 'setup/src/index.js' }
       ]);
 
-      if (choices.includes('Netlify Functions')) {
-        copy([
+      makeChoice('Netlify Functions')({
+        files: [
           { from: 'setup/netlify.lambda.toml', to: 'netlify.toml' },
           { from: 'setup/src/setupProxy.js' },
           { from: 'setup/docs/netlify-functions.md' }
-        ]);
-        dependencies.push('netlify-lambda');
-        dependencies.push('http-proxy-middleware');
-      } else {
-        copy([
-          { from: 'setup/netlify.toml' }
-        ])
-      }
+        ],
+        dependencies: ['netlify-lambda', 'http-proxy-middleware']
+      }, {
+        files: [{ from: 'setup/netlify.toml' }]
+      });
+
+      makeChoice('SCSS Linting')({
+        files: [{ from: 'setup/sass-lint.yml', to: '.sass-lint.yml' }],
+        devDependencies: ['sass-lint'],
+        packageJson: {
+          'lint:sass': 'sass-lint -v -q',
+          'lint:all': 'run-s lint:**'
+        }
+      });
 
       console.log(keyline);
       console.log('COPYING:');
-      toCopy.forEach(pathObj => {
+      files.forEach(pathObj => {
         const to = appPath(pathObj.to || pathObj.from.replace('setup/', ''));
         const from = modulePath(pathObj.from);
         const dirPath = to.split('/').slice(0, -1).join('/');
@@ -176,7 +194,7 @@ say(`React++ boilerplate generator:`)
       });
       console.log(keyline);
 
-      const packageJson = JSON.parse(fs.readFileSync(appPath('package.json')));
+      packageJson = JSON.parse(fs.readFileSync(appPath('package.json')));
       packageJson.scripts = scripts;
       packageJson.husky = husky;
 
@@ -185,11 +203,11 @@ say(`React++ boilerplate generator:`)
       console.log(keyline);
 
       console.log('ADDING DEPENDENCIES...\n');
-      childProcess.execSync(`yarn add ${dependencies.join(' ')}`);
+      childProcess.execSync(`yarn add ${dependencies.normal.join(' ')}`);
       console.log(keyline);
 
       console.log('ADDING DEV DEPENDENCIES...\n');
-      childProcess.execSync(`yarn add -D ${devDependencies.join(' ')}`);
+      childProcess.execSync(`yarn add -D ${devDependencies.dev.join(' ')}`);
       console.log(keyline);
 
       console.log('FETCHING LATEST BASE STYLES');
@@ -200,6 +218,7 @@ say(`React++ boilerplate generator:`)
       fs.unlinkSync(appPath('styles/README.md'));
       fs.renameSync(appPath('styles'), appPath('src/styles'));
       console.log(keyline);
+
       console.log('APP CONFIGURED!');
       console.log('You might want to commit these changes.');
       console.log('View README.md for instructions.');

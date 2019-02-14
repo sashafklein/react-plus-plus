@@ -32,7 +32,6 @@ git commit -m 'App created' // In case you want to revert changes
 npx react-plus-plus
 ```
 
-
 ### TODO
 
 Some optional features I hope to add:
