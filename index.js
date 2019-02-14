@@ -69,7 +69,6 @@ const copy = (fromArr, toArr) => {
 
 const makeChoice = choiceName => (yesObject, noObject = {}) => {
   const object = choices.includes(choiceName) ? yesObject : noObject;
-  console.log("CHANGES", choiceName, JSON.stringify(object, null, 2));
   copy(object.files, files);
   copy(object.dependencies, dependencies);
   copy(object.devDependencies, devDependencies);
@@ -216,11 +215,11 @@ say(`React++ boilerplate generator:`)
       console.log(keyline);
 
       console.log('ADDING DEPENDENCIES...\n');
-      childProcess.execSync(`yarn add ${dependencies.normal.join(' ')}`);
+      childProcess.execSync(`yarn add ${dependencies.join(' ')}`);
       console.log(keyline);
 
       console.log('ADDING DEV DEPENDENCIES...\n');
-      childProcess.execSync(`yarn add -D ${devDependencies.dev.join(' ')}`);
+      childProcess.execSync(`yarn add -D ${devDependencies.join(' ')}`);
       console.log(keyline);
 
       console.log('FETCHING LATEST BASE STYLES');
