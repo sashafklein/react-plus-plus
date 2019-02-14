@@ -175,7 +175,7 @@ say(`React++ boilerplate generator:`)
 
       makeChoice('Immutable')({
         dependencies: ['immutable', 'react-immutable-proptypes'],
-        files: [{ from: 'setup/utils/propTypes.js' }]
+        files: [{ from: 'setup/src/utils/propTypes.js' }]
       });
 
       makeChoice('Styleguidist Component Docs')({
