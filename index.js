@@ -75,7 +75,7 @@ const makeChoice = choiceName => (yesObject, noObject = {}) => {
   copy(object.files, files);
   copy(object.dependencies, dependencies);
   copy(object.devDependencies, devDependencies);
-  packageJson = { ...object.packageJson, ...(yesObject.packageJson || {}) };
+  packageJson.scripts = { ...object.scripts, ...(yesObject.scripts || {}) };
 };
 
 say(`React++ boilerplate generator:`)
@@ -86,6 +86,7 @@ say(`React++ boilerplate generator:`)
   .then(say(keyline))
   .then(ask('Netlify Functions'))
   .then(ask('SCSS Linting'))
+  .then(ask('Immutable'))
   .then(() => say(choices.length
     ? `You chose to add: \n${ choices.map(choice => `- ${choice}`).join('\n') }`
     : 'You chose to stick with the base option set.'
@@ -153,7 +154,7 @@ say(`React++ boilerplate generator:`)
           { from: 'setup/docs/netlify-functions.md' }
         ],
         dependencies: ['netlify-lambda', 'http-proxy-middleware'],
-        packageJson: {
+        scripts: {
           'start:app': scripts.start,
           start: 'run-p start:**',
           'build:app': scripts.build,
@@ -167,10 +168,24 @@ say(`React++ boilerplate generator:`)
       makeChoice('SCSS Linting')({
         files: [{ from: 'setup/sass-lint.yml', to: '.sass-lint.yml' }],
         devDependencies: ['sass-lint'],
-        packageJson: {
+        scripts: {
           'lint:sass': 'sass-lint -v -q',
           'lint:all': 'run-s lint:**'
         }
+      });
+
+      makeChoice('Immutable')({
+        dependencies: ['immutable', 'react-immutable-proptypes'],
+        files: [{ from: 'setup/utils/propTypes.js' }]
+      });
+
+      makeChoice('Styleguidist Component Docs')({
+        devDependencies: ['react-styleguidist'],
+        scripts: {
+          'docs:serve': 'npx styleguidist server',
+          'docs:build': 'npx styleguidist build'
+        },
+        files: [{ from: 'setup/styleguide.config.js' }]
       });
 
       console.log(keyline);

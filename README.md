@@ -36,7 +36,5 @@ npx react-plus-plus
 
 Some optional features I hope to add:
 
-- Immutable integration
 - Testing boilerplate and setup
-- Component documentation (eg React Styleguidist)
 - Common components
