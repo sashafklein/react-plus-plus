@@ -129,7 +129,7 @@ say(`React++ boilerplate generator:`)
         { from: 'setup/src/redux/createStore.js' },
         { from: 'setup/src/redux/reducers/index.js' },
         { from: 'setup/src/redux/reducers/breakpoint.js' },
-        { from: 'setup/src/redux/reducers/actions.js' },
+        { from: 'setup/src/redux/actions.js' },
         { from: 'setup/src/containers/AppContainer/index.js' },
         { from: 'setup/src/containers/AppContainer/AppContainer.scss' },
         { from: 'setup/src/routes/index.js' },
