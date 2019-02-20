@@ -12,6 +12,7 @@ const middleware = [
   thunk
 ];
 
+/* eslint-disable-next-line */
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const enhancer = composeEnhancers(
   applyMiddleware(...middleware)
@@ -26,8 +27,10 @@ const configureStore = (initialState) => {
 
   // Hot reload reducers (requires Webpack or Browserify HMR to be enabled)
   if (module.hot) {
-    module.hot.accept('./reducers', () =>
-      store.replaceReducer(require('./reducers'))
+    /* eslint-disable implicit-arrow-linebreak, global-require */
+    module.hot.accept(
+      './reducers',
+      () => store.replaceReducer(require('./reducers'))
     );
   }
 

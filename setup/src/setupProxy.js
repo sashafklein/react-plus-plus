@@ -1,10 +1,10 @@
 const proxy = require('http-proxy-middleware');
 
-module.exports = function(app) {
+module.exports = function setupProxy(app) {
   app.use(proxy('/.netlify/functions/', {
     target: 'http://localhost:9000/',
-    "pathRewrite": {
-      "^/\\.netlify/functions": ""
+    pathRewrite: {
+      '^/\\.netlify/functions': ''
     }
   }));
 };

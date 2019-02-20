@@ -23,27 +23,35 @@ export const breakpoints = {
  * @param {number} breakpoint.size      Number defining current breakpoint size
  * @return {string}                     Returns class string that matches correct breakpoint
  */
-export function setClass (classObj, breakpoint) {
-  if (classObj.default === undefined) classObj.default = '';
+export function setClass(classObj, breakpoint) {
   if (typeof breakpoint !== 'object') {
     throw new Error(`Bad breakpoint type given: ${breakpoint} (${typeof breakpoint})`);
   }
 
-  if (breakpoint.name === 'default') return classObj['default'];
+  const def = classObj.default || '';
+
+  if (breakpoint.name === 'default') return def;
 
   const sizeArray = Object.keys(breakpoints).reverse();
   const startingIndex = sizeArray.indexOf(breakpoint.name);
   const firstMatchedKey = sizeArray
     .slice(startingIndex)
-    .find(key => classObj[key]) ||
-    'default';
+    .find(key => classObj[key]) || 'default';
 
-  return classObj[firstMatchedKey];
+  return firstMatchedKey === 'default'
+    ? def
+    : classObj[firstMatchedKey];
 }
 
-function dispatchActiveQuery (mediaQueryState, action) {
+function dispatchActiveQuery(mediaQueryState, action) {
   // Reduce media query to the smallest breakpoint
-  const activeQuery = mediaQueryState.reduce((prev, curr) => curr.matches ? curr : prev && prev.matches ? prev : null);
+  const activeQuery = mediaQueryState.reduce((prev, curr) => {
+    if (curr.matches) {
+      return curr;
+    } else {
+      return (prev && prev.matches) ? prev : null;
+    }
+  });
 
   const breakpointName = activeQuery ? activeQuery.name : 'default';
   const breakpointSize = activeQuery && activeQuery.breakpoint;
@@ -53,14 +61,15 @@ function dispatchActiveQuery (mediaQueryState, action) {
 }
 
 /**
- * Called in componentDidMount in top-level app component, this initializes the Redux breakpoint object
+ * Called in componentDidMount in top-level app component,
+ * this initializes the Redux breakpoint object
  *
  * @param      {Object[]}   windowObj    The window object (default given)
  */
-export function initReduxBreakpoints (windowObj = window, setActiveBreakpoint) {
+export function initReduxBreakpoints(windowObj = window, setActiveBreakpoint) {
   if (!this.mediaQueryState) { this.mediaQueryState = []; }
 
-  Object.keys(breakpoints).forEach(key => {
+  Object.keys(breakpoints).forEach((key) => {
     // Create breakpoint object
     const query = windowObj.matchMedia(`(max-width: ${breakpoints[key]}px)`);
     // Add breakpoint value
@@ -68,7 +77,7 @@ export function initReduxBreakpoints (windowObj = window, setActiveBreakpoint) {
     // Add breakpoint name
     query.name = key;
     // Add breakpoint change handler
-    function breakpointChange () {
+    function breakpointChange() {
       dispatchActiveQuery(this.mediaQueryState, setActiveBreakpoint);
     }
 
@@ -83,8 +92,8 @@ export function initReduxBreakpoints (windowObj = window, setActiveBreakpoint) {
   dispatchActiveQuery(this.mediaQueryState, setActiveBreakpoint);
 }
 
-function breakpointFromString (string, breakpoints) {
-  const breakpoint = breakpoints[string];
+function breakpointFromString(string, bps) {
+  const breakpoint = bps[string];
 
   if (!breakpoint) {
     throw new Error(`Bad breakpoint variable given: ${string}`);
@@ -132,8 +141,8 @@ export const bpIsLessThan = (breakpointToCompare, currentBreakpoint) => {
     ? breakpointFromString(breakpointToCompare, breakpoints)
     : breakpointToCompare;
 
-  if (currentBreakpoint.size !== null &&
-      currentBreakpoint.size <= comparison) {
+  if (currentBreakpoint.size !== null
+      && currentBreakpoint.size <= comparison) {
     return true;
   } else {
     return false;
@@ -142,19 +151,15 @@ export const bpIsLessThan = (breakpointToCompare, currentBreakpoint) => {
 
 /** Injects breakpoint functionality into the wrapped component */
 export function bpConnect(WrappedComponent) {
-  class Component extends React.Component {
-    render () {
-      const { breakpoint } = this.props;
-
-      return <WrappedComponent
-        { ...this.props }
-        setClass={ (obj) => setClass(obj, breakpoint) }
-        bpIsGreaterThan={ (comparison) => bpIsGreaterThan(comparison, breakpoint) }
-        bpIsLessThan={ (comparison) => bpIsLessThan(comparison, breakpoint) }
-        bps={ breakpoints }
-      />;
-    }
-  }
+  const Component = props => (
+    <WrappedComponent
+      { ...props }
+      setClass={ obj => setClass(obj, props.breakpoint) }
+      bpIsGreaterThan={ (comparison => bpIsGreaterThan(comparison, props.breakpoint)) }
+      bpIsLessThan={ (comparison => bpIsLessThan(comparison, props.breakpoint)) }
+      bps={ breakpoints }
+    />
+  );
 
   const mapStateToProps = state => ({
     breakpoint: state.breakpoint

@@ -9,17 +9,18 @@ import 'styles/core.scss';
 import './AppContainer.scss';
 
 class AppContainer extends React.Component {
-  componentDidMount () {
+  componentDidMount() {
     const { dispatch } = this.props;
 
     // Track window changes and update global breakpoint object accordingly
     initReduxBreakpoints.call(
-      this, window, (breakpointName, breakpointSize, mediaQueryState) =>
-        dispatch(setActiveBreakpoint(breakpointName, breakpointSize, mediaQueryState))
+      this, window, (breakpointName, breakpointSize, mediaQueryState) => dispatch(
+        setActiveBreakpoint(breakpointName, breakpointSize, mediaQueryState)
+      )
     );
   }
 
-  render () {
+  render() {
     const { children } = this.props;
 
     return (
@@ -37,8 +38,4 @@ AppContainer.propTypes = {
   dispatch: func
 };
 
-const mapStateToProps = state => ({
-  router: state.router
-});
-
-export default connect(mapStateToProps)(AppContainer);
+export default connect()(AppContainer);

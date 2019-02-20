@@ -5,7 +5,7 @@ const childProcess = require('child_process')
 
 const choices = [];
 const files = [];
-const dependencies = ['node-sass', 'prop-types', 'redux', 'react-redux', 'redux-thunk', 'connected-react-router', 'history', 'react-router-dom'];
+const dependencies = ['node-sass', 'prop-types', 'redux', 'react-redux', 'redux-thunk', 'connected-react-router', 'history', 'react-router', 'react-router-dom'];
 
 // Eslint Dependencies pulled separately
 const devDependencies = ['husky', 'npm-run-all'];
@@ -71,8 +71,8 @@ const makeChoice = choiceName => (yesObject, noObject = {}) => {
   packageJson.scripts = { ...packageJson.scripts, ...(object.scripts || {}) };
 };
 
-say(`React++ boilerplate generator:`)
-  .then(say(`\nThis boilerplate includes Redux, Thunk, Connected-React Router, SCSS, ESLint, and more!`))
+say(`\nReact++ boilerplate generator.`)
+  .then(say(`Includes: Redux, Thunk, Connected-React Router, SCSS, ESLint, and more!`))
   .then(say(`Please answer 'y' or 'n' to the below configuration questions:`))
   .then(say(keyline))
   .then(ask('Netlify Functions'))
@@ -131,7 +131,7 @@ say(`React++ boilerplate generator:`)
 
         // Hidden files aren't copied, so they're not hidden here
         { from: 'setup/gitignore', to: '.gitignore' },
-        { from: 'setup/eslintrc', to: '.eslintrc' },
+        { from: 'setup/eslintrc.js', to: '.eslintrc.js' },
         { from: 'setup/eslintignore', to: '.eslintignore' },
         { from: 'setup/circleci/config.yml', to: '.circleci/config.yml' },
         { from: 'setup/docs/testing.md' },
