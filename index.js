@@ -6,7 +6,9 @@ const childProcess = require('child_process')
 const choices = [];
 const files = [];
 const dependencies = ['node-sass', 'prop-types', 'redux', 'react-redux', 'redux-thunk', 'connected-react-router', 'history', 'react-router-dom'];
-const devDependencies = ['husky', 'eslint-config-standard-react', 'eslint-plugin-babel', 'eslint-plugin-promise', 'eslint-plugin-react', 'npm-run-all'];
+
+// Eslint Dependencies pulled separately
+const devDependencies = ['husky', 'npm-run-all'];
 
 const toDelete = ['src/App.js', 'src/App.css', 'src/App.test.js', 'src/index.css'];
 let confirmed = false;
@@ -221,6 +223,10 @@ say(`React++ boilerplate generator:`)
 
       console.log('ADDING DEV DEPENDENCIES...\n');
       childProcess.execSync(`yarn add -D ${devDependencies.join(' ')}`);
+      console.log(keyline);
+
+      console.log('ADDING LINTING DEPENDENCIES...\n');
+      childProcess.execSync(`npx install-peerdeps --dev eslint-config-airbnb`);
       console.log(keyline);
 
       console.log('FETCHING LATEST BASE STYLES');
