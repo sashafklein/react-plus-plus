@@ -217,16 +217,16 @@ say(`React++ boilerplate generator:`)
       fs.writeFileSync(appPath('package.json'), JSON.stringify(packageJson, null, 2));
       console.log(keyline);
 
+      console.log('ADDING LINTING DEPENDENCIES...\n');
+      childProcess.execSync(`npx install-peerdeps --dev eslint-config-airbnb`);
+      console.log(keyline);
+
       console.log('ADDING DEPENDENCIES...\n');
       childProcess.execSync(`yarn add ${dependencies.join(' ')}`);
       console.log(keyline);
 
       console.log('ADDING DEV DEPENDENCIES...\n');
       childProcess.execSync(`yarn add -D ${devDependencies.join(' ')}`);
-      console.log(keyline);
-
-      console.log('ADDING LINTING DEPENDENCIES...\n');
-      childProcess.execSync(`npx install-peerdeps --dev eslint-config-airbnb`);
       console.log(keyline);
 
       console.log('FETCHING LATEST BASE STYLES');
