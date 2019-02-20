@@ -37,12 +37,6 @@ console.log(banner);
 console.log(title);
 console.log(banner)
 
-console.log(keyline);
-console.log('CONTEXT:')
-console.log('- App Directory:', appDir);
-console.log('- Module Directory :', __dirname);
-console.log(keyline);
-
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
@@ -78,15 +72,13 @@ const makeChoice = choiceName => (yesObject, noObject = {}) => {
 };
 
 say(`React++ boilerplate generator:`)
-  .then(say(`This boilerplate includes Redux, Thunk, Connected-React Router, SCSS, ESLint, and more!`))
-  .then(say(keyline))
-  .then(say(`You've got some options.`))
-  .then(say(`Please answer one of 'y' or 'n'.`))
+  .then(say(`\nThis boilerplate includes Redux, Thunk, Connected-React Router, SCSS, ESLint, and more!`))
+  .then(say(`Please answer 'y' or 'n' to the below configuration questions:`))
   .then(say(keyline))
   .then(ask('Netlify Functions'))
   .then(ask('SCSS Linting'))
   .then(ask('Immutable'))
-  // .then(ask('Styleguidist Component Docs'))
+  // .then(ask('Styleguidist Component Docs')) // See below
   .then(() => say(choices.length
     ? `You chose to add: \n${ choices.map(choice => `- ${choice}`).join('\n') }`
     : 'You chose to stick with the base option set.'
