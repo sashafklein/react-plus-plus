@@ -136,8 +136,12 @@ say(`\nReact++ boilerplate generator.`)
         { from: 'setup/circleci/config.yml', to: '.circleci/config.yml' },
         { from: 'setup/docs/testing.md' },
         { from: 'setup/docs/decisions.md' },
+        { from: 'setup/docs/app-structure.md' },
         { from: 'setup/src/index.js' }
       ], files);
+
+      // Make empty components folder
+      fs.mkdirSync(appPath('src/components'));
 
       makeChoice('Netlify Functions')({
         files: [

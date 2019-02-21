@@ -6,10 +6,10 @@ import { object } from 'prop-types';
 import AppContainer from 'containers/AppContainer';
 
 /**
-  App routes.
-  Path is path match.
-  Additional fields can be added
-**/
+ * App routes.
+ * Path is path match.
+ * Additional fields can be added
+ */
 export const routes = [
   // { path: '/', component: Home },
 ];
@@ -23,12 +23,12 @@ const Routes = ({ router }) => {
     <AppContainer>
       <Switch location={ location }>
         {
-          routes.map((route, index) => (
+          routes.map(route => (
             <Route
               path={ route.path }
               component={ route.component }
               exact
-              key={ index }
+              key={ route.path }
             />
           ))
         }
