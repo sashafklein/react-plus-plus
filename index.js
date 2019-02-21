@@ -126,6 +126,7 @@ say(`\nReact++ boilerplate generator.`)
         { from: 'setup/src/containers/AppContainer/index.js' },
         { from: 'setup/src/containers/AppContainer/AppContainer.scss' },
         { from: 'setup/src/routes/index.js' },
+        { from: 'setup/src/routes/Home/index.js' },
         { from: 'setup/src/utils/responsiveHelpers.js' },
         { from: 'setup/generate.js' },
 
@@ -147,7 +148,8 @@ say(`\nReact++ boilerplate generator.`)
         files: [
           { from: 'setup/netlify.lambda.toml', to: 'netlify.toml' },
           { from: 'setup/src/setupProxy.js' },
-          { from: 'setup/docs/netlify-functions.md' }
+          { from: 'setup/docs/netlify-functions.md' },
+          { from: 'setup/src/lambda/hello.js' }
         ],
         dependencies: ['netlify-lambda', 'http-proxy-middleware'],
         scripts: {

@@ -5,13 +5,15 @@ import { object } from 'prop-types';
 
 import AppContainer from 'containers/AppContainer';
 
+import Home from './Home';
+
 /**
  * App routes.
  * Path is path match.
  * Additional fields can be added
  */
 export const routes = [
-  // { path: '/', component: Home },
+  { path: '/', component: Home },
 ];
 
 /**
