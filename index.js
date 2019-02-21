@@ -152,6 +152,7 @@ say(`\nReact++ boilerplate generator.`)
         dependencies: ['netlify-lambda', 'http-proxy-middleware'],
         scripts: {
           'start:app': scripts.start,
+          'start:lambda': 'NODE_PATH=src/ netlify-lambda serve src/lambda',
           start: 'run-p start:**',
           'build:app': scripts.build,
           build: 'NODE_PATH=src/ run-p build:**',
@@ -166,7 +167,7 @@ say(`\nReact++ boilerplate generator.`)
         devDependencies: ['sass-lint'],
         scripts: {
           'lint:sass': 'sass-lint -v -q',
-          'lint:all': 'run-s lint:**'
+          'lint:all': 'run-s lint:fix lint:sass'
         }
       });
 
