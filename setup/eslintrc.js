@@ -10,8 +10,10 @@ module.exports = {
         'ignore': ['redux/', 'components/', 'containers/', 'routes/', 'utils/', 'styles/']
       }
     ],
+
     // Don't force all objects to be multiline, if they're short.
     'object-curly-newline': 0,
+
     // Enforce trailing commas for arrays, objects, and imports,
     // but only when they're on multiple lines.
     'comma-dangle': ['error', {
@@ -21,11 +23,14 @@ module.exports = {
         'exports': 'never',
         'functions': 'never'
     }],
+
     // This is just a bad rule, because it involves either disabling the linter
     // or forcing changes when a second import is added.
     'import/prefer-default-export': 0,
+    'import/no-named-as-default': 0,
     'function-paren-newline': ['error', 'consistent'],
-    // We believe the else makes this more explicit.
+
+    // The else makes this more explicit.
     'no-else-return': 0,
 
     // REACT SPECIFIC - Remove in non-React project.
