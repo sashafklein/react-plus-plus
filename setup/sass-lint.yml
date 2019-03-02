@@ -8,8 +8,8 @@ rules:
   # Rule bem-depth will enforce how many elements a BEM
   # selector can contain.
   bem-depth:
-    - 0
-    - max-depth: 1
+    - 1
+    - max-depth: 2
 
   # Rule border-zero will enforce whether one should use 0
   # or none when specifying a zero border value
@@ -33,13 +33,15 @@ rules:
   # @import paths should have leading underscores and/or
   # filename extensions.
   clean-import-paths:
-    - 0
+    - 2
+    - filename-extension: false
+      leading-underscore: false
 
   # Rule empty-line-between-blocks will enforce whether or
   # not nested blocks should include a space between the
   # last non-comment declaration or not.
   empty-line-between-blocks:
-    - 2
+    - 1
     - include: true
     - allow-single-line-rulesets: true
 
@@ -80,7 +82,7 @@ rules:
   # Rule hex-length will enforce the length of hexadecimal
   # values
   hex-length:
-    - 0
+    - 1
     - style: short
 
   # Rule hex-notation will enforce the case of
@@ -99,7 +101,7 @@ rules:
   # (in spaces) and ensure that tabs and spaces are
   # not mixed.
   indentation:
-    - 1
+    - 2
     - size: 2
 
   # Rule leading-zero will enforce whether or not decimal
