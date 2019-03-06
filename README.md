@@ -6,7 +6,7 @@ This tool sets up boilerplate on top of a fresh Create React App install, instal
 - Redux Thunk
 - Connected React Router
 - SCSS
-- ESlint
+- ESlint (slightly modified AirBnb setup)
 - CircleCI
 - Netlify
 - Base SCSS structure
@@ -19,6 +19,8 @@ As well as some homemade tools:
 And optionally:
 
 - Netlify Functions
+
+Because it builds *on top* of Create React App, it leverages the preexisting functionality, with limited risk of falling behind on community improvements. 
 
 ### Usage
 
@@ -38,3 +40,4 @@ Some optional features I hope to add:
 
 - Testing boilerplate and setup
 - Common components
+- Style aliasing
