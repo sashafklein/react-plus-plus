@@ -31,7 +31,7 @@ npx create-react-app my-new-app
 cd my-new-app
 git add .
 git commit -m 'App created' // In case you want to revert changes
-npx react-plus-plus
+npx react-plus-plus // Follow command-line instructions to configure your install
 ```
 
 ### TODO
