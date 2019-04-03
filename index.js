@@ -201,7 +201,7 @@ say('\nReact++ boilerplate generator.')
             const originalRc = fs.readFileSync(appPath('.eslintrc.js')).toString();
             const newRc = originalRc.replace(
               'extends: \'airbnb\',',
-              'extends: [\'airbnb\', \'plugin:flowtype/recommended\'],\n\tplugins: [\'flowtype\']'
+              'extends: [\'airbnb\', \'plugin:flowtype/recommended\'],\n\tplugins: [\'flowtype\'],'
             );
             fs.writeFileSync(appPath('.eslintrc.js'), newRc);
           }
