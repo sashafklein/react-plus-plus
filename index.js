@@ -153,9 +153,6 @@ say(`\nReact++ boilerplate generator.`)
         { from: 'setup/src/index.js' }
       ], files);
 
-      // Make empty components folder
-      fs.mkdirSync(appPath('src/components'));
-
       makeChoice('Netlify Functions')({
         files: [
           { from: 'setup/netlify.lambda.toml', to: 'netlify.toml' },
