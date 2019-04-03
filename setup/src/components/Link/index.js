@@ -1,5 +1,5 @@
 import React from 'react';
-import isExternal from 'is-external-url';
+import isExternal from 'is-url-external';
 import { Link } from 'react-router-dom';
 
 import { string, any } from 'utils/propTypes';

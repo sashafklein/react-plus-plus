@@ -8,7 +8,7 @@ const files = [];
 const dependencies = [
   'node-sass', 'prop-types', 'redux', 'react-redux', 'redux-thunk',
   'connected-react-router', 'history', 'react-router', 'react-router-dom',
-  'react-transition-group', 'is-external-url'
+  'react-transition-group', 'is-url-external'
 ];
 
 // Eslint Dependencies pulled separately
