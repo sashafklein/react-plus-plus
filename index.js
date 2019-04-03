@@ -198,7 +198,7 @@ say('\nReact++ boilerplate generator.')
         exec: [
           () => childProcess.execSync('yarn flow init'),
           () => {
-            const originalRc = fs.readFileSync(appPath('.eslintrc.js'));
+            const originalRc = fs.readFileSync(appPath('.eslintrc.js')).toString();
             const newRc = originalRc.replace(
               'extends: \'airbnb\',',
               'extends: [\'airbnb\', \'plugin:flowtype/recommended\'],\n\tplugins: [\'flowtype\']'
