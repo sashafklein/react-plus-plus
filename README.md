@@ -1,5 +1,7 @@
 # README
 
+([On NPM](https://www.npmjs.com/package/react-plus-plus)).
+
 This tool sets up boilerplate on top of a fresh Create React App install, installing and integrating:
 
 - Redux
@@ -21,6 +23,7 @@ And optionally:
 - Netlify Functions
 - SCSS Linting
 - ImmutableJS
+- Flow
 
 Because it builds *on top* of Create React App, it leverages the preexisting functionality, with limited risk of falling behind on community improvements.
 
