@@ -1,3 +1,5 @@
+/* eslint no-console: 0 */
+
 const fs = require('fs');
 
 const showHelp = () => {
@@ -22,8 +24,7 @@ const flagHash = {
   d: 'dry'
 };
 
-const classTemplate =
-`export class NAME extends React.Component {
+const classTemplate = `export class NAME extends React.Component {
   constructor (props) {
     super(props);
     this.state = {};
@@ -36,34 +37,31 @@ const classTemplate =
   }
 }`;
 
-const functionalTemplate =
-`export const NAME = () => (
+const functionalTemplate = `export const NAME = () => (
   <div>NAME</div>
 );`;
 
-const propTemplate =
-`const {} = PropTypes;
+const propTemplate = `const {} = PropTypes;
 NAME.propTypes = {
 
-};`
+};`;
 
-const scssTemplate =
-`@import 'styles/_sass-includes.scss';
+const scssTemplate = `@import 'styles/_sass-includes.scss';
 
 
 `;
 
 const lines = [
-  { line: `import React from 'react';`, if: flags => true },
-  { line: `-import { connect } from 'react-redux';`, if: flags => flags.includes('redux') },
-  { line: `-import PropTypes from 'utils/propTypes';`, if: flags => flags.includes('props') },
-  { line: `-import './NAME.scss';`, if: flags => flags.includes('styles')},
+  { line: 'import React from \'react\';', if: () => true },
+  { line: '-import { connect } from \'react-redux\';', if: flags => flags.includes('redux') },
+  { line: '-import PropTypes from \'utils/propTypes\';', if: flags => flags.includes('props') },
+  { line: '-import \'./NAME.scss\';', if: flags => flags.includes('styles') },
   { line: functionalTemplate, if: flags => !flags.includes('class') },
   { line: classTemplate, if: flags => flags.includes('class') },
-  { line: `const mapStateToProps = state => ({});`, if: flags => flags.includes('redux') },
+  { line: 'const mapStateToProps = state => ({});', if: flags => flags.includes('redux') },
   { line: propTemplate, if: flags => flags.includes('props') },
-  { line: `export default NAME;`, if: flags => !flags.includes('redux') },
-  { line: `export default connect(mapStateToProps)(NAME);`, if: flags => flags.includes('redux') }
+  { line: 'export default NAME;', if: flags => !flags.includes('redux') },
+  { line: 'export default connect(mapStateToProps)(NAME);', if: flags => flags.includes('redux') }
 ];
 
 const args = process.argv.slice(2);

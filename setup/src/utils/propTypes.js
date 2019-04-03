@@ -14,7 +14,7 @@ export const routerType = shape({
   location: {
     pathname: string.isRequired,
     hash: string.isRequired,
-    search: string.isRequired
+    search: string.isRequired,
     state: object
   },
   action: string

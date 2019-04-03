@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+
+/* eslint no-console: 0 */
 const readline = require('readline');
 const fs = require('fs');
 const childProcess = require('child_process');
@@ -25,7 +27,7 @@ const joinPath = (path, base) => {
   } else {
     return [base, path].join('/');
   }
-}
+};
 
 const modulePath = path => joinPath(path, __dirname);
 const appPath = path => joinPath(path, appDir);
@@ -39,7 +41,7 @@ const keyline = `\n${title.replace(/./g, '-')}\n`;
 console.log('\n');
 console.log(banner);
 console.log(title);
-console.log(banner)
+console.log(banner);
 
 const toExecute = [];
 
@@ -50,7 +52,7 @@ const rl = readline.createInterface({
 
 let packageJson = {};
 
-const ask = (target) => () => new Promise((resolve) => {
+const ask = target => () => new Promise((resolve) => {
   rl.question(`Integrate ${target}?\n`, (answer) => {
     if (answer[0].toLowerCase() === 'y') {
       choices.push(target);
@@ -60,9 +62,9 @@ const ask = (target) => () => new Promise((resolve) => {
   });
 });
 
-const say = (text) => new Promise((resolve) => {
+const say = text => new Promise((resolve) => {
   console.log(text);
-  resolve()
+  resolve();
 });
 
 const copy = (fromArr, toArr) => {
@@ -78,10 +80,10 @@ const makeChoice = choiceName => (yesObject, noObject = {}) => {
   packageJson.scripts = { ...packageJson.scripts, ...(object.scripts || {}) };
 };
 
-say(`\nReact++ boilerplate generator.`)
-  .then(say(`Includes: Redux, Thunk, Connected-React Router, SCSS, ESLint, and more!`))
+say('\nReact++ boilerplate generator.')
+  .then(say('Includes: Redux, Thunk, Connected-React Router, SCSS, ESLint, and more!'))
   .then(say('NOTE: You may want to commit your code before continuing.'))
-  .then(say(`Please answer 'Y' or 'N' to the below configuration questions:`))
+  .then(say('Please answer \'Y\' or \'N\' to the below configuration questions:'))
   .then(say(keyline))
   .then(ask('Netlify Functions'))
   .then(ask('SCSS Linting'))
@@ -89,12 +91,11 @@ say(`\nReact++ boilerplate generator.`)
   .then(ask('Flow'))
   // .then(ask('Styleguidist Component Docs')) // See below
   .then(() => say(choices.length
-    ? `You chose to add: \n${ choices.map(choice => `- ${choice}`).join('\n') }`
-    : 'You chose to stick with the base option set.'
-  ))
+    ? `You chose to add: \n${choices.map(choice => `- ${choice}`).join('\n')}`
+    : 'You chose to stick with the base option set.'))
   .then(() => new Promise((resolve) => {
-    rl.question(`\nIs that configuration correct?\n`, (answer) => {
-      confirmed = answer[0].toLowerCase() === 'y'
+    rl.question('\nIs that configuration correct?\n', (answer) => {
+      confirmed = answer[0].toLowerCase() === 'y';
       resolve();
     });
   }))
@@ -108,20 +109,20 @@ say(`\nReact++ boilerplate generator.`)
     try {
       packageJson = JSON.parse(fs.readFileSync(appPath('package.json')));
       const scripts = {
-        "g": "node generate.js",
-        "s": "yarn start",
-        "t": "yarn test",
-        "lint": "eslint .",
-        "lint:fix": "eslint . --fix",
-        "l": "yarn lint:fix",
-        "start": "NODE_PATH=src/ react-scripts start",
-        "build": "NODE_PATH=src/ react-scripts build",
-        "test": "NODE_PATH=src react-scripts test",
-        "eject": "NODE_PATH=src react-scripts eject"
+        g: 'node generate.js',
+        s: 'yarn start',
+        t: 'yarn test',
+        lint: 'eslint .',
+        'lint:fix': 'eslint . --fix',
+        l: 'yarn lint:fix',
+        start: 'NODE_PATH=src/ react-scripts start',
+        build: 'NODE_PATH=src/ react-scripts build',
+        test: 'NODE_PATH=src react-scripts test',
+        eject: 'NODE_PATH=src react-scripts eject'
       };
       const husky = {
-        "hooks": {
-          "pre-commit": "yarn l"
+        hooks: {
+          'pre-commit': 'yarn l'
         }
       };
       packageJson.scripts = scripts;
@@ -167,7 +168,7 @@ say(`\nReact++ boilerplate generator.`)
           start: 'run-p start:**',
           'build:app': scripts.build,
           build: 'NODE_PATH=src/ run-p build:**',
-          'build:lambda': "NODE_PATH=src/netlify-lambda build src/lambda",
+          'build:lambda': 'NODE_PATH=src/netlify-lambda build src/lambda',
         }
       }, {
         files: [{ from: 'setup/netlify.toml' }]
@@ -191,7 +192,7 @@ say(`\nReact++ boilerplate generator.`)
       makeChoice('Flow')({
         dependencies: ['flow-bin'],
         scripts: {
-          'flow': 'flow'
+          flow: 'flow'
         },
         files: [{ from: 'setup/docs/flow.md' }],
         exec: ['yarn flow init']
@@ -209,18 +210,18 @@ say(`\nReact++ boilerplate generator.`)
 
       console.log(keyline);
       console.log('COPYING:');
-      files.forEach(pathObj => {
+      files.forEach((pathObj) => {
         const to = appPath(pathObj.to || pathObj.from.replace('setup/', ''));
         const from = modulePath(pathObj.from);
         const dirPath = to.split('/').slice(0, -1).join('/');
         fs.mkdirSync(dirPath, { recursive: true });
-        console.log(`- FROM ${pathObj.from} TO ${to}`)
+        console.log(`- FROM ${pathObj.from} TO ${to}`);
         fs.copyFileSync(from, to);
       });
 
-      console.log(`- FROM ${ appPath('README.md') } TO ${ appPath('docs/create-react-app.md') }`);
+      console.log(`- FROM ${appPath('README.md')} TO ${appPath('docs/create-react-app.md')}`);
       fs.copyFileSync(appPath('README.md'), appPath('docs/create-react-app.md'));
-      console.log(`- FROM ${ modulePath('setup/README.md') } TO ${ appPath('README.md') }`);
+      console.log(`- FROM ${modulePath('setup/README.md')} TO ${appPath('README.md')}`);
       fs.copyFileSync(modulePath('setup/README.md'), appPath('README.md'));
       console.log(keyline);
 
@@ -245,7 +246,7 @@ say(`\nReact++ boilerplate generator.`)
 
       console.log('ADDING LINTING DEPENDENCIES...\n');
       const existingEslintVersion = childProcess.execSync('yarn run eslint -v');
-      childProcess.execSync(`npx install-peerdeps --dev eslint-config-airbnb -Y`);
+      childProcess.execSync('npx install-peerdeps --dev eslint-config-airbnb -Y');
       console.log(keyline);
 
       try {
@@ -255,15 +256,15 @@ say(`\nReact++ boilerplate generator.`)
         const version = outputLines.match(versionRegex)[1].slice(1);
         childProcess.execSync(`yarn remove eslint && yarn add -D eslint@${version}`);
       } catch (err) {
-        console.log('Failed to revert to correct eslint.')
+        console.log('Failed to revert to correct eslint.');
         console.log('Error hit:', err);
-        console.log('Run `yarn start` to see correct version to install.')
+        console.log('Run `yarn start` to see correct version to install.');
       }
 
       console.log(keyline);
 
       console.log('FETCHING LATEST BASE STYLES');
-      childProcess.execSync(`git clone git@github.com:weareredshift/base-sass.git styles`);
+      childProcess.execSync('git clone git@github.com:weareredshift/base-sass.git styles');
       childProcess.execSync(`rm -rf ${appPath('styles/.git')}`);
       fs.unlinkSync(appPath('styles/.gitignore'));
       fs.unlinkSync(appPath('styles/core.css'));
@@ -273,9 +274,9 @@ say(`\nReact++ boilerplate generator.`)
 
       if (toExecute.length > 0) {
         console.log('EXECUTING ANY QUEUED COMMANDS');
-        toExecute.forEach(c => {
+        toExecute.forEach((c) => {
           try {
-            childProcess.execSync(c)
+            childProcess.execSync(c);
           } catch (e) {
             console.log('Failed on queued command: ', c);
             console.log('Error:', e);
