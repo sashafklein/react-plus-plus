@@ -77,7 +77,8 @@ const makeChoice = choiceName => (yesObject, noObject = {}) => {
 
 say(`\nReact++ boilerplate generator.`)
   .then(say(`Includes: Redux, Thunk, Connected-React Router, SCSS, ESLint, and more!`))
-  .then(say(`Please answer 'y' or 'n' to the below configuration questions:`))
+  .then(say('NOTE: You may want to commit your code before continuing.'))
+  .then(say(`Please answer 'Y' or 'N' to the below configuration questions:`))
   .then(say(keyline))
   .then(ask('Netlify Functions'))
   .then(ask('SCSS Linting'))
@@ -233,7 +234,20 @@ say(`\nReact++ boilerplate generator.`)
       console.log(keyline);
 
       console.log('ADDING LINTING DEPENDENCIES...\n');
+      const existingEslintVersion = childProcess.execSync('yarn run eslint -v');
       childProcess.execSync(`npx install-peerdeps --dev eslint-config-airbnb -Y`);
+      console.log(keyline);
+
+      try {
+        console.log('REVERTING TO CORRECT ESLINT VERSION...\n');
+        const version = existingEslintVersion.toString().slice(1);
+        childProcess.execSync(`yarn remove eslint && yarn add -D eslint@${version}`);
+      } catch (err) {
+        console.log('Failed to revert to correct eslint.')
+        console.log('Error hit:', err);
+        console.log('Run `yarn start` to see correct version to install.')
+      }
+
       console.log(keyline);
 
       console.log('FETCHING LATEST BASE STYLES');
@@ -245,9 +259,11 @@ say(`\nReact++ boilerplate generator.`)
       fs.renameSync(appPath('styles'), appPath('src/styles'));
       console.log(keyline);
 
+      childProcess.execSync(`rm -rf ${appPath('styles/.git')}`);
       console.log('APP CONFIGURED!');
+      console.log('\n');
       console.log('You might want to commit these changes.');
-      console.log('View README.md for instructions.');
+      console.log('View README.md for further instructions.');
       console.log(keyline);
     } catch (err) {
       console.log(err);

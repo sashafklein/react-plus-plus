@@ -1,8 +1,3 @@
-import React from 'react';
-import { connect } from 'react-redux';
-
-import { object } from 'utils/propTypes';
-
 export const breakpoints = {
   desktopLg: 1400,
   desktopMd: 1300,
@@ -150,29 +145,6 @@ export const bpIsLessThan = (breakpointToCompare, currentBreakpoint) => {
   }
 };
 
-/** Injects breakpoint functionality into the wrapped component */
-export function bpConnect(WrappedComponent) {
-  const Component = props => (
-    <WrappedComponent
-      { ...props }
-      setClass={ obj => setClass(obj, props.breakpoint) }
-      bpIsGreaterThan={ (comparison => bpIsGreaterThan(comparison, props.breakpoint)) }
-      bpIsLessThan={ (comparison => bpIsLessThan(comparison, props.breakpoint)) }
-      bps={ breakpoints }
-    />
-  );
-
-  const mapStateToProps = state => ({
-    breakpoint: state.breakpoint
-  });
-
-  Component.propTypes = {
-    breakpoint: object
-  };
-
-  return connect(mapStateToProps)(Component);
-}
-
 /**
  * Spread this function in mapStateToProps to inject basic breakpoint functionality,
  * as props, into your component:
@@ -182,9 +154,9 @@ export function bpConnect(WrappedComponent) {
  *    });
  * @param {Object} state Global state, including breakpoint object.
  */
-export function bpProps = state => ({
+export const bpProps = state => ({
   setClass: obj => setClass(obj, state.breakpoint),
-  bpIsGT: comp => bpIsGreaterThan(comp, state.breakpoint),
-  bpIsLT: comp => bpIsLessThan(comp, state.breakpoint),
+  bpIsGT: comparison => bpIsGreaterThan(comparison, state.breakpoint),
+  bpIsLT: comparison => bpIsLessThan(comparison, state.breakpoint),
   bps: breakpoints
 });
