@@ -190,12 +190,22 @@ say('\nReact++ boilerplate generator.')
       });
 
       makeChoice('Flow')({
-        dependencies: ['flow-bin'],
+        dependencies: ['flow-bin', 'eslint-plugin-flowtype'],
         scripts: {
           flow: 'flow'
         },
         files: [{ from: 'setup/docs/flow.md' }],
-        exec: ['yarn flow init']
+        exec: [
+          () => childProcess.execSync('yarn flow init'),
+          () => {
+            const originalRc = fs.readFileSync(appPath('.eslintrc.js'));
+            const newRc = original.replace(
+              `extends: 'airbnb',`,
+              `extends: ['airbnb', 'plugin:flowtype/recommended'],\n\tplugins: ['flowtype']`,
+            )
+            fs.writeFileSync(appPath('.eslintrc.js'), newRc);
+          }
+        ]
       });
 
       // Blocked by need to eject to handle webpack config for SCSS imports
@@ -276,9 +286,9 @@ say('\nReact++ boilerplate generator.')
         console.log('EXECUTING ANY QUEUED COMMANDS');
         toExecute.forEach((c) => {
           try {
-            childProcess.execSync(c);
+            c();
           } catch (e) {
-            console.log('Failed on queued command: ', c);
+            console.log('Failed on queued command: ', c.toString());
             console.log('Error:', e);
           }
         });
