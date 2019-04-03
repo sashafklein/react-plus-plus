@@ -41,6 +41,8 @@ console.log(banner);
 console.log(title);
 console.log(banner)
 
+const toExecute = [];
+
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
@@ -72,7 +74,7 @@ const makeChoice = choiceName => (yesObject, noObject = {}) => {
   copy(object.files, files);
   copy(object.dependencies, dependencies);
   copy(object.devDependencies, devDependencies);
-  (object.exec || []).forEach(l => childProcess.execSync(l));
+  (object.exec || []).forEach(l => toExecute.push(l));
   packageJson.scripts = { ...packageJson.scripts, ...(object.scripts || {}) };
 };
 
@@ -271,6 +273,19 @@ say(`\nReact++ boilerplate generator.`)
       fs.unlinkSync(appPath('styles/README.md'));
       fs.renameSync(appPath('styles'), appPath('src/styles'));
       console.log(keyline);
+
+      if (toExecute.length > 0) {
+        console.log('EXECUTING ANY QUEUED COMMANDS');
+        toExecute.forEach(c => {
+          try {
+            childProcess.execSync(c)
+          } catch (e) {
+            console.log('Failed on queued command: ', c);
+            console.log('Error:', e);
+          }
+        });
+        console.log(keyline);
+      }
 
       childProcess.execSync(`rm -rf ${appPath('styles/.git')}`);
       console.log('APP CONFIGURED!');
