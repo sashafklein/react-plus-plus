@@ -208,7 +208,7 @@ say(`\nReact++ boilerplate generator.`)
         fs.copyFileSync(from, to);
       });
 
-      console.log(`- FROM ${ appPath('README.md') } TO ${ appPath('docs/README.md') }`);
+      console.log(`- FROM ${ appPath('README.md') } TO ${ appPath('docs/create-react-app.md') }`);
       fs.copyFileSync(appPath('README.md'), appPath('docs/create-react-app.md'));
       console.log(`- FROM ${ modulePath('setup/README.md') } TO ${ appPath('README.md') }`);
       fs.copyFileSync(modulePath('setup/README.md'), appPath('README.md'));
@@ -240,7 +240,9 @@ say(`\nReact++ boilerplate generator.`)
 
       try {
         console.log('REVERTING TO CORRECT ESLINT VERSION...\n');
-        const version = existingEslintVersion.toString().slice(1);
+        const outputLines = existingEslintVersion.toString();
+        const versionRegex = /v[0-9]+\.[0-9]+\.[0-9]+/g;
+        const version = outputLines.match(versionRegex)[1].slice(1);
         childProcess.execSync(`yarn remove eslint && yarn add -D eslint@${version}`);
       } catch (err) {
         console.log('Failed to revert to correct eslint.')
