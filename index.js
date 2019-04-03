@@ -194,7 +194,7 @@ say(`\nReact++ boilerplate generator.`)
         scripts: {
           'flow': 'flow'
         },
-        files: [{ from: 'setup/docs/flow.md' }]
+        files: [{ from: 'setup/docs/flow.md' }],
         exec: ['yarn flow init']
       });
 
