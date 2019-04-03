@@ -72,6 +72,7 @@ const makeChoice = choiceName => (yesObject, noObject = {}) => {
   copy(object.files, files);
   copy(object.dependencies, dependencies);
   copy(object.devDependencies, devDependencies);
+  (object.exec || []).forEach(l => childProcess.execSync(l));
   packageJson.scripts = { ...packageJson.scripts, ...(object.scripts || {}) };
 };
 
@@ -83,6 +84,7 @@ say(`\nReact++ boilerplate generator.`)
   .then(ask('Netlify Functions'))
   .then(ask('SCSS Linting'))
   .then(ask('Immutable'))
+  .then(ask('Flow'))
   // .then(ask('Styleguidist Component Docs')) // See below
   .then(() => say(choices.length
     ? `You chose to add: \n${ choices.map(choice => `- ${choice}`).join('\n') }`
@@ -185,6 +187,14 @@ say(`\nReact++ boilerplate generator.`)
         dependencies: ['immutable', 'react-immutable-proptypes'],
         // Overwrite propType util with Immutable version
         files: [{ from: 'setup/src/utils/immutablePropTypes.js', to: 'src/utils/propTypes.js' }]
+      });
+
+      makeChoice('Flow')({
+        dependencies: ['flow-bin'],
+        scripts: {
+          'flow': 'flow'
+        },
+        exec: ['yarn flow init']
       });
 
       // Blocked by need to eject to handle webpack config for SCSS imports
