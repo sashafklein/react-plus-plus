@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { func, oneOfType, node, array } from 'prop-types';
 
 import { setActiveBreakpoint } from 'redux/actions';
+import { func, oneOfType, node, array } from 'utils/propTypes';
 import { initReduxBreakpoints } from 'utils/responsiveHelpers';
 
 import 'styles/core.scss';
@@ -25,9 +25,7 @@ class AppContainer extends React.Component {
 
     return (
       <div className="app">
-        <div className="pagecontent">
-          { children }
-        </div>
+        { children }
       </div>
     );
   }

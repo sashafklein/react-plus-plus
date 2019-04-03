@@ -5,7 +5,11 @@ const childProcess = require('child_process')
 
 const choices = [];
 const files = [];
-const dependencies = ['node-sass', 'prop-types', 'redux', 'react-redux', 'redux-thunk', 'connected-react-router', 'history', 'react-router', 'react-router-dom'];
+const dependencies = [
+  'node-sass', 'prop-types', 'redux', 'react-redux', 'redux-thunk',
+  'connected-react-router', 'history', 'react-router', 'react-router-dom',
+  'react-transition-group', 'is-external-url'
+];
 
 // Eslint Dependencies pulled separately
 const devDependencies = ['husky', 'npm-run-all'];
@@ -123,12 +127,15 @@ say(`\nReact++ boilerplate generator.`)
         { from: 'setup/src/redux/reducers/index.js' },
         { from: 'setup/src/redux/reducers/breakpoint.js' },
         { from: 'setup/src/redux/actions.js' },
+        { from: 'setup/src/components/Link/index.js' },
         { from: 'setup/src/containers/AppContainer/index.js' },
         { from: 'setup/src/containers/AppContainer/AppContainer.scss' },
         { from: 'setup/src/routes/index.js' },
         { from: 'setup/src/routes/Home/index.js' },
+        { from: 'setup/src/routes/FourOhFour/index.js' },
         { from: 'setup/src/utils/responsiveHelpers.js' },
         { from: 'setup/generate.js' },
+        { from: 'setup/src/utils/propTypes.js' }
 
         // Hidden files aren't copied, so they're not hidden here
         { from: 'setup/gitignore', to: '.gitignore' },
@@ -175,7 +182,8 @@ say(`\nReact++ boilerplate generator.`)
 
       makeChoice('Immutable')({
         dependencies: ['immutable', 'react-immutable-proptypes'],
-        files: [{ from: 'setup/src/utils/propTypes.js' }]
+        // Overwrite propType util with Immutable version
+        files: [{ from: 'setup/src/utils/immutablePropTypes.js', to: 'src/utils/propTypes.js' }]
       });
 
       // Blocked by need to eject to handle webpack config for SCSS imports

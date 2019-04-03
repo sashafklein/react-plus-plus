@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { object } from 'prop-types';
+
+import { object } from 'utils/propTypes';
 
 export const breakpoints = {
   desktopLg: 1400,
@@ -171,3 +172,19 @@ export function bpConnect(WrappedComponent) {
 
   return connect(mapStateToProps)(Component);
 }
+
+/**
+ * Spread this function in mapStateToProps to inject basic breakpoint functionality,
+ * as props, into your component:
+ *    const mapStateToProps = state => ({
+ *      someProp: state.someVal,
+ *      ...bpProps(state)
+ *    });
+ * @param {Object} state Global state, including breakpoint object.
+ */
+export function bpProps = state => ({
+  setClass: obj => setClass(obj, state.breakpoint),
+  bpIsGT: comp => bpIsGreaterThan(comp, state.breakpoint),
+  bpIsLT: comp => bpIsLessThan(comp, state.breakpoint),
+  bps: breakpoints
+});

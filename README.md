@@ -19,8 +19,10 @@ As well as some homemade tools:
 And optionally:
 
 - Netlify Functions
+- SCSS Linting
+- ImmutableJS
 
-Because it builds *on top* of Create React App, it leverages the preexisting functionality, with limited risk of falling behind on community improvements. 
+Because it builds *on top* of Create React App, it leverages the preexisting functionality, with limited risk of falling behind on community improvements.
 
 ### Usage
 
@@ -39,5 +41,4 @@ npx react-plus-plus // Follow command-line instructions to configure your instal
 Some optional features I hope to add:
 
 - Testing boilerplate and setup
-- Common components
-- Style aliasing
+- More common components
