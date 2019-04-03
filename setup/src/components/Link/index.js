@@ -1,6 +1,6 @@
 import React from 'react';
 import isExternal from 'is-url-external';
-import { Link } from 'react-router-dom';
+import { Link as BaseLink } from 'react-router-dom';
 
 import { string, any } from 'utils/propTypes';
 
@@ -13,7 +13,7 @@ export const Link = (props) => {
 
   return isExternal(props.to)
     ? <a { ...props } target="_blank" rel="noopener noreferrer" />
-    : <Link { ...props } />
+    : <BaseLink { ...props } />
 };
 
 Link.propTypes = {

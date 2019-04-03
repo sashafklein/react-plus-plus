@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router';
 import { connect } from 'react-redux';
 import { Transition, TransitionGroup } from 'react-transition-group';
 
-import { object } from 'utils/propTypes';
+import { routerType } from 'utils/propTypes';
 import AppContainer from 'containers/AppContainer';
 
 import Home from './Home';
@@ -30,13 +30,13 @@ const Routes = ({ router }) => {
           key={ location.key }
           timeout={ (location.state && location.state.duration) ? location.state.duration : 400 }
         >
-          {(status) => (
+          {status => (
             <Switch location={ location }>
               {
                 routes.map(route => (
                   <Route
                     path={ route.path }
-                    render={ (props) => <route.component { ...props } transitionStatus={ status } /> }
+                    render={ props => <route.component { ...props } transitionStatus={ status } /> }
                     exact
                     key={ route.path }
                   />
@@ -56,7 +56,7 @@ const mapStateToProps = state => ({
 });
 
 Routes.propTypes = {
-  router: object
+  router: routerType
 };
 
 export default connect(mapStateToProps)(Routes);
