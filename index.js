@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const readline = require('readline');
 const fs = require('fs');
-const childProcess = require('child_process')
+const childProcess = require('child_process');
 
 const choices = [];
 const files = [];
@@ -135,7 +135,7 @@ say(`\nReact++ boilerplate generator.`)
         { from: 'setup/src/routes/FourOhFour/index.js' },
         { from: 'setup/src/utils/responsiveHelpers.js' },
         { from: 'setup/generate.js' },
-        { from: 'setup/src/utils/propTypes.js' }
+        { from: 'setup/src/utils/propTypes.js' },
 
         // Hidden files aren't copied, so they're not hidden here
         { from: 'setup/gitignore', to: '.gitignore' },
