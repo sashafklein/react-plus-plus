@@ -16,7 +16,7 @@ This tool sets up boilerplate on top of a fresh Create React App install, instal
 As well as some homemade tools:
 
 - A breakpoint reducer/wrapper
-- A file for generating components
+- A command-line script for generating components
 
 And optionally:
 
